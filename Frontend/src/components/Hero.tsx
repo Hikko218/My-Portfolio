@@ -51,7 +51,7 @@ export default function Hero() {
         </p>
 
         <div className="flex justify-center gap-4 mb-6">
-          <Link href="/projects">
+          <Link href="/portfolio">
           <Button className="bg-cyan-500 hover:bg-cyan-700  text-gray-300">
             My Work
           </Button>

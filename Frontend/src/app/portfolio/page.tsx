@@ -1,26 +1,40 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const allProjects = [
-  { title: "Modern Website", image: "/file.svg", category: "Web" },
-  { title: "Mobile App UI", image: "/file.svg", category: "App" },
-  { title: "Brand Identity", image: "/file.svg", category: "Design" },
-  { title: "Landing Page", image: "/file.svg", category: "Web" },
-  { title: "iOS Concept", image: "/file.svg", category: "App" },
-];
+interface Project {
+  id: number;
+  title: string;
+  category: string;
+  image: string;
+}
 
 const categories = ["All", "Web", "App", "Design"];
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Projects() {
   const [activeCategory, setActiveCategory] = useState("All");
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+
 
   const filteredProjects =
     activeCategory === "All"
-      ? allProjects
-      : allProjects.filter((p) => p.category === activeCategory);
+      ? projects
+      : projects.filter((p) => p.category === activeCategory);
+
+  useEffect(() => {
+    fetch(`${apiUrl}/projects`) 
+      .then(res => res.json())
+      .then(data => {
+        setProjects(data);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <div className="text-center py-24">Loading…</div>;
 
   return (
     <section
@@ -56,12 +70,14 @@ export default function Projects() {
       </div>
 
       <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
+        <AnimatePresence>
         {filteredProjects.map((project, index) => (
           <motion.div
             key={index}
             className="bg-zinc-800/70 backdrop-blur-xl rounded-lg overflow-hidden shadow hover:shadow-xl transition duration-300"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
             transition={{ delay: index * 0.1 }}
           >
             <Image
@@ -77,6 +93,7 @@ export default function Projects() {
             </div>
           </motion.div>
         ))}
+        </AnimatePresence>
       </div>
     </section>
   );
