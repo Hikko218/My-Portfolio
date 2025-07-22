@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -11,7 +12,7 @@ export class ProjectsService {
   ) {}
 
   findAll() {
-    return this.projectsRepo.find();
+    return this.projectsRepo.find({ order: { id: 'ASC' } });
   }
 
   create(data: Partial<Project>) {

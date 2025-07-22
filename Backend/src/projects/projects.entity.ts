@@ -13,4 +13,7 @@ export class Project {
 
   @Column()
   image: string;
+
+  @Column({ nullable: true })
+  description: string;
 }

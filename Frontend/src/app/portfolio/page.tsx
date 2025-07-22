@@ -9,6 +9,7 @@ interface Project {
   title: string;
   category: string;
   image: string;
+  description: string;
 }
 
 const categories = ["All", "Web", "App", "Design"];
@@ -81,7 +82,7 @@ export default function Projects() {
             transition={{ delay: index * 0.1 }}
           >
             <Image
-              src={project.image}
+              src={`${apiUrl}/uploads/${project.image}`}
               alt={project.title}
               width={600}
               height={400}
@@ -90,6 +91,7 @@ export default function Projects() {
             <div className="p-5">
               <h3 className="text-xl text-cyan-500 font-semibold mb-1">{project.title}</h3>
               <p className="text-sm text-gray-300">{project.category}</p>
+              <p className="text-sm text-gray-300">{project.description}</p>
             </div>
           </motion.div>
         ))}
