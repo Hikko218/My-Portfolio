@@ -17,7 +17,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org heiko-ries --project my-portfolio-backend ./dist && sentry-cli sourcemaps upload --org heiko-ries --project my-portfolio-backend ./dist"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -26,6 +27,8 @@
     "@nestjs/platform-express": "^11.1.5",
     "@nestjs/serve-static": "^5.0.3",
     "@nestjs/typeorm": "^11.0.0",
+    "@sentry/cli": "^2.50.2",
+    "@sentry/node": "^9.40.0",
     "dotenv": "^17.2.0",
     "multer": "^2.0.2",
     "pg": "^8.16.3",
