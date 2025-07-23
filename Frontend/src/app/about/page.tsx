@@ -2,14 +2,52 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 
-const skills = [
-  { name: "Photoshop", level: 100 },
-  { name: "Illustrator", level: 85 },
-  { name: "Next.js", level: 85 },
-];
+interface Skills {
+  id: number;
+  skill: string;
+  level: string;
+}
+
+interface About {
+  id: number;
+  description: string;
+  name: string;
+  phone: string;
+  email: string;
+  image: string;
+}
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function About() {
+  const [loadingSk, setLoadingSk] = useState(true);
+  const [loadingAb, setLoadingAb] = useState(true);
+  const [about, setAbout] = useState<About[]>([]);
+  const [skills, setSkills] = useState<Skills[]>([]);
+
+  useEffect(() => {
+    fetch(`${apiUrl}/about`)
+      .then((res) => res.json())
+      .then((data) => {
+        setAbout(data);
+        setLoadingAb(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch(`${apiUrl}/skills`)
+      .then((res) => res.json())
+      .then((data) => {
+        setSkills(data);
+        setLoadingSk(false);
+      });
+  }, []);
+
+  if (loadingAb) return <div className="text-center py-24">Loading…</div>;
+  if (loadingSk) return <div className="text-center py-24">Loading…</div>;
+
   return (
     <section
       id="about"
@@ -26,7 +64,7 @@ export default function About() {
             className="relative"
           >
             <Image
-              src="/Profil_Foto_1.png"
+              src={`${apiUrl}/uploads/${about[0].image}`}
               alt="Profil_Image"
               width={500}
               height={400}
@@ -37,9 +75,9 @@ export default function About() {
           {/* Skills */}
           <div className="mt-8 space-y-4">
             {skills.map((skill) => (
-              <div key={skill.name}>
+              <div key={skill.skill}>
                 <div className="flex justify-between mb-1 text-sm font-medium text-gray-200">
-                  <span>{skill.name}</span>
+                  <span>{skill.skill}</span>
                   <span>{skill.level}%</span>
                 </div>
                 <div className="w-full bg-gray-700 rounded-full h-2">
@@ -66,24 +104,18 @@ export default function About() {
         >
           <h2 className="text-3xl font-bold mb-6 text-cyan-500">About Me</h2>
           <p className="text-gray-300 leading-relaxed mb-6">
-            Hi! My name is Edrae Kennedy. I am a graphic designer, and I’m very
-            passionate and dedicated to my work. With 10 years experience as a
-            professional graphic designer, I have acquired the skills and
-            knowledge necessary to make your project a success. I enjoy every
-            step of the design process, from discussion and collaboration to
-            concept and execution.
+            {about[0].description}
           </p>
 
           <div className="space-y-1 text-sm text-gray-400">
             <p>
-              <strong className="text-cyan-500">Name:</strong> Edrae Kennedy
+              <strong className="text-cyan-500">Name:</strong> {about[0].name}
             </p>
             <p>
-              <strong className="text-cyan-500">Phone:</strong> +1903 6598 123
+              <strong className="text-cyan-500">Phone:</strong> +{about[0].phone}
             </p>
             <p>
-              <strong className="text-cyan-500">Email:</strong>{" "}
-              hello@example.com
+              <strong className="text-cyan-500">Email:</strong> {about[0].email}
             </p>
           </div>
         </motion.div>

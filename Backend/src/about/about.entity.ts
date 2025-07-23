@@ -16,4 +16,7 @@ export class About {
 
   @Column()
   email: string;
+
+  @Column({ nullable: true })
+  image: string;
 }
