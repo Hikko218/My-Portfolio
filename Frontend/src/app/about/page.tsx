@@ -85,9 +85,6 @@ export default function About() {
               <strong className="text-cyan-500">Email:</strong>{" "}
               hello@example.com
             </p>
-            <p>
-              <strong className="text-cyan-500">Twitter:</strong> @designguru9
-            </p>
           </div>
         </motion.div>
       </div>

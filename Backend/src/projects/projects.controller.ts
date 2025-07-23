@@ -12,6 +12,7 @@ import { Project } from './projects.entity';
 
 @Controller('projects')
 export class ProjectsController {
+  // eslint-disable-next-line no-unused-vars
   constructor(private readonly projectsService: ProjectsService) {}
 
   @Get()
