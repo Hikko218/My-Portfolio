@@ -1,130 +1,278 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { Pencil } from "lucide-react";
+
+interface Skills {
+  id: number;
+  skill: string;
+  level: string;
+}
+
+interface About {
+  id: number;
+  description: string;
+  name: string;
+  phone: string;
+  email: string;
+  image: string;
+}
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function EditableAbout() {
-  // Beispiel-Initialdaten
-  const [about, setAbout] = useState({
-    name: "Edrae Kennedy",
-    phone: "+1903 6598 123",
-    email: "hello@example.com",
-    twitter: "@designguru9",
-    description:
-      "Hi! My name is Edrae Kennedy. I am a graphic designer, and I’m very passionate and dedicated to my work. With 10 years experience as a professional graphic designer, I have acquired the skills and knowledge necessary to make your project a success. I enjoy every step of the design process, from discussion and collaboration to concept and execution.",
-    skills: [
-      { name: "Photoshop", level: 100 },
-      { name: "Illustrator", level: 85 },
-    ],
+  const [loadingSk, setLoadingSk] = useState(true);
+  const [loadingAb, setLoadingAb] = useState(true);
+  const [about, setAbout] = useState<About[]>([]);
+  const [skills, setSkills] = useState<Skills[]>([]);
+  const [successIdDel, setSuccessIdDel] = useState<number | null>(null);
+  const [successIdAdd, setSuccessIdAdd] = useState(false);
+  const [successIdUp, setSuccessIdUp] = useState(false);
+
+  const [skillsForm, setSkillsForm] = useState({
+    skill: "",
+    level: 0,
   });
 
-  // Handler für einfache Felder
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setAbout({ ...about, [e.target.name]: e.target.value });
+  useEffect(() => {
+    fetch(`${apiUrl}/about`)
+      .then((res) => res.json())
+      .then((data) => {
+        setAbout(data);
+        setLoadingAb(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch(`${apiUrl}/skills`)
+      .then((res) => res.json())
+      .then((data) => {
+        setSkills(data);
+        setLoadingSk(false);
+      });
+  }, []);
+
+  if (loadingAb || !about) {
+    return <div className="text-center py-24">Loading…</div>;
+  }
+  if (loadingSk) return <div className="text-center py-24">Loading…</div>;
+
+  const updateAbout = async (id: number, about: About) => {
+    await fetch(`${apiUrl}/about/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(about),
+    });
+    setSuccessIdUp(true);
+    setTimeout(() => setSuccessIdUp(false), 2000);
+    const res = await fetch(`${apiUrl}/about`);
+    const data = await res.json();
+    setAbout(data);
   };
 
   // Handler für Skills
-  const updateSkill = (idx: number, field: "name" | "level", value: string | number) => {
-    const newSkills = about.skills.map((skill, i) =>
-      i === idx ? { ...skill, [field]: field === "level" ? Number(value) : value } : skill
-    );
-    setAbout({ ...about, skills: newSkills });
+  const updateSkill = async (id: number, updatedSkill: Skills) => {
+    await fetch(`${apiUrl}/skills/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedSkill),
+    });
+
+    const res = await fetch(`${apiUrl}/skills`);
+    const data = await res.json();
+    setSkills(data);
   };
 
   // Skill hinzufügen
-  const addSkill = () => {
-    setAbout({ ...about, skills: [...about.skills, { name: "", level: 0 }] });
+  const addSkill = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    await fetch(`${apiUrl}/skills`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(skillsForm),
+    });
+    setSuccessIdAdd(true);
+    setTimeout(async () => {
+      const res = await fetch(`${apiUrl}/skills`);
+      const data = await res.json();
+      setSkills(data);
+      setSuccessIdAdd(false);
+    }, 2000);
+    setSkillsForm({ skill: "", level: 0 });
   };
 
   // Skill löschen
-  const removeSkill = (idx: number) => {
-    setAbout({ ...about, skills: about.skills.filter((_, i) => i !== idx) });
+  const removeSkill = async (id: number) => {
+    await fetch(`${apiUrl}/skills/${id}`, {
+      method: "DELETE",
+    });
+    setSuccessIdDel(id);
+    setTimeout(async () => {
+      const res = await fetch(`${apiUrl}/skills`);
+      const data = await res.json();
+      setSkills(data);
+      setSuccessIdDel(null);
+    }, 2000);
+  };
+
+  // Handler für einfache Felder
+  const handleChangeAbout = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    index: number
+  ) => {
+    const updatedAbout = [...about];
+    updatedAbout[index] = {
+      ...updatedAbout[index],
+      [e.target.name]: e.target.value,
+    };
+    setAbout(updatedAbout);
+  };
+
+  const handleChangeSkills = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const updatedSkills = [...skills];
+    updatedSkills[index] = {
+      ...updatedSkills[index],
+      [e.target.name]: e.target.value,
+    };
+    setSkills(updatedSkills);
+  };
+
+  const handleChangeSkillsForm = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setSkillsForm((prev) => ({
+      ...prev,
+      [name]: name === "level" ? Number(value) : value,
+    }));
   };
 
   return (
-    <motion.div 
-    className="bg-zinc-900/70 p-6 rounded-lg space-y-6"
+    <motion.div
+      className="bg-zinc-900/70 p-6 rounded-lg space-y-6"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
     >
-      <div className="grid md:grid-cols-2 gap-4">
-        <input
-          name="name"
-          value={about.name}
-          onChange={handleChange}
-          className="p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
-          placeholder="Name"
-        />
-        <input
-          name="phone"
-          value={about.phone}
-          onChange={handleChange}
-          className="p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
-          placeholder="Phone"
-        />
-        <input
-          name="email"
-          value={about.email}
-          onChange={handleChange}
-          className="p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
-          placeholder="Email"
-        />
-        <input
-          name="twitter"
-          value={about.twitter}
-          onChange={handleChange}
-          className="p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
-          placeholder="Twitter"
-        />
-      </div>
+      {about.map((about, i) => (
+        <div key={i} className="grid md:grid-cols-2 gap-4">
+          <input
+            name="name"
+            value={about.name}
+            onChange={(e) => handleChangeAbout(e, i)}
+            className="p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            placeholder="Name"
+          />
+          <input
+            name="phone"
+            value={about.phone}
+            onChange={(e) => handleChangeAbout(e, i)}
+            className="p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            placeholder="Phone"
+          />
+          <input
+            name="email"
+            value={about.email}
+            onChange={(e) => handleChangeAbout(e, i)}
+            className="p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            placeholder="Email"
+          />
 
-      <textarea
-        name="description"
-        value={about.description}
-        onChange={handleChange}
-        rows={4}
-        className="w-full p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none"
-        placeholder="Description"
-      />
-
+          <textarea
+            name="description"
+            value={about.description || ""}
+            onChange={(e) => handleChangeAbout(e, i)}
+            rows={4}
+            className="w-full p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none"
+            placeholder="Description"
+          />
+          <button
+            type="button"
+            onClick={() => {
+              updateAbout(about.id, about);
+            }}
+            className="p-2 w-30 bg-cyan-500 hover:bg-cyan-600 rounded  text-white text-lg"
+          >
+            Update
+          </button>
+        </div>
+      ))}
+      {successIdUp && <div className=" text-green-400 pt-2">Updated!</div>}
       <div>
         <h3 className="font-semibold text-cyan-500 mb-2">Skills</h3>
         <div className="space-y-3">
-          {about.skills.map((skill, i) => (
+          {skills.map((skill, i) => (
             <div key={i} className="flex gap-3 items-center">
               <input
-                value={skill.name}
-                onChange={e => updateSkill(i, "name", e.target.value)}
+                name="skill"
+                value={skill.skill || ""}
+                onChange={(e) => handleChangeSkills(e, i)}
                 className="p-2 rounded bg-zinc-700 text-white flex-1 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 placeholder="Skill name"
               />
               <input
-                type="number"
-                value={skill.level}
+                name="level"
+                value={skill.level ?? 0}
                 min={0}
                 max={100}
-                onChange={e => updateSkill(i, "level", e.target.value)}
+                onChange={(e) => handleChangeSkills(e, i)}
                 className="p-2 rounded bg-zinc-700 text-white w-20 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 placeholder="%"
               />
               <button
                 type="button"
-                onClick={() => removeSkill(i)}
+                onClick={() => updateSkill(skill.id, skill)}
+                className="text-yellow-400 hover:text-yellow-600 font-bold text-lg"
+                title="Edit Skill"
+              >
+                <Pencil size={16} />
+              </button>
+              <button
+                type="button"
+                onClick={() => removeSkill(skill.id)}
                 className="text-red-400 hover:text-red-600 font-bold text-lg"
                 title="Remove Skill"
               >
                 ×
               </button>
+              {successIdDel === skill.id && (
+                <div className=" text-red-400 pt-2">Skill removed!</div>
+              )}
             </div>
           ))}
-          <button
-            type="button"
-            onClick={addSkill}
-            className="px-4 py-2 mt-2 bg-cyan-500 hover:bg-cyan-700 text-white rounded"
-          >
-            + Add Skill
-          </button>
+        </div>
+        <div className="mb-2">
+          <form className="flex flex-col" onSubmit={addSkill}>
+            <div className="flex  mt-6 gap-4">
+              <input
+                name="skill"
+                value={skillsForm.skill}
+                onChange={handleChangeSkillsForm}
+                placeholder="Skill"
+                className="p-2 flex-1 bg-zinc-700 rounded  focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              />
+              <input
+                name="level"
+                type="number"
+                value={skillsForm.level}
+                onChange={handleChangeSkillsForm}
+                placeholder="Level"
+                className="p-2 w-20 bg-zinc-700 rounded  focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              />
+            </div>
+            <button
+              type="submit"
+              className="p-2 mt-4 w-30 bg-cyan-500 hover:bg-cyan-700 text-white text-lg rounded"
+            >
+              + Add Skill
+            </button>
+            {successIdAdd && (
+              <div className=" text-green-400 pt-2">Skill added!</div>
+            )}
+          </form>
         </div>
       </div>
     </motion.div>

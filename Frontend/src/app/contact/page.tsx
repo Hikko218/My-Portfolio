@@ -6,6 +6,7 @@ import { Button } from "@/ui/button";
 
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -13,10 +14,20 @@ export default function Contact() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Später hier API call an Nest.js-Backend
-    console.log("Form submitted:", form);
+    const res = await fetch(`${apiUrl}/contact`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    });
+    if (res.ok) {
+      setForm({name: "", email: "", message: "" });
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 2000);
+    }
   };
 
   return (
@@ -33,7 +44,7 @@ export default function Contact() {
         <h2 className="text-3xl md:text-4xl font-bold mb-4 text-cyan-500">
           Contact Me
         </h2>
-        <p className="text-gray-400">Got a project in mind? Let’s talk.</p>
+        <p className="text-gray-400">Any questions? Let’s talk.</p>
       </motion.div>
 
       <motion.form
@@ -81,6 +92,7 @@ export default function Contact() {
         >
           Send Message
         </Button>
+        {success && <div className="text-green-400 pt-2">Message send!</div>}
       </motion.form>
     </section>
   );

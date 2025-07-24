@@ -7,10 +7,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { AboutModule } from './about/about.module';
 import { SkillsModule } from './skills/skills.module';
 import * as path from 'path';
-import { MailerModule } from '@nestjs-modules/mailer';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { ContactModule } from './contact/contact.module';
-
 
 @Module({
   imports: [
@@ -37,28 +34,7 @@ import { ContactModule } from './contact/contact.module';
       }),
       inject: [ConfigService],
     }),
-
-    MailerModule.forRoot({
-      transport: {
-        host: process.env.SMTP_HOST,
-        port: +process.env.SMTP_PORT!,
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS,
-        },
-      },
-      defaults: {
-        from: '"Kontaktformular" <no-reply@example.com>',
-      },
-      template: {
-        dir: path.join(__dirname, 'templates'),
-        adapter: new HandlebarsAdapter(),
-        options: {
-          strict: true,
-        },
-      },
-    }),
-
+    ContactModule,
     ProjectsModule,
     UploadsModule,
     AboutModule,
@@ -67,4 +43,3 @@ import { ContactModule } from './contact/contact.module';
   ],
 })
 export class AppModule {}
-
