@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { ImLinkedin } from "react-icons/im";
 import { FaGithub } from "react-icons/fa";
 
+// Navigation items for the header
 const navItems = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
@@ -27,7 +28,6 @@ export default function Header() {
           <Link href="/admin" className="text-gray-300 hover:text-cyan-500 ">
             Admin
           </Link>
-          
         </motion.div>
 
         {/* Desktop Navigation Links */}
@@ -43,7 +43,6 @@ export default function Header() {
           ))}
         </nav>
 
-          
         {/* Mobile Hamburger Icon */}
         <button
           className="md:hidden text-gray-300"
@@ -53,10 +52,9 @@ export default function Header() {
           <HiMenu size={28} />
         </button>
 
-
         {/* Social Icons */}
         <div className="hidden md:flex space-x-4 text-gray-300">
-           <a
+          <a
             href="https://www.linkedin.com/in/heiko-ries-b35778374"
             target="_blank"
             rel="noopener noreferrer"
@@ -75,7 +73,7 @@ export default function Header() {
         </div>
       </div>
 
-        {/* Mobile Dropdown Menu */}
+      {/* Mobile Dropdown Menu */}
       {menuOpen && (
         <nav className="md:hidden absolute top-16 left-0 w-full bg-black/80 backdrop-blur-md border-b border-gray-800 flex flex-col items-center py-4 z-40">
           {navItems.map((item) => (

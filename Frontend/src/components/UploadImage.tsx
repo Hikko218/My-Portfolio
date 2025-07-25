@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 interface ImageUploadProps {
-  uploadUrl: string; // Ziel-URL für den Upload
-  method: string; // HTTP-Methode, optional
+  uploadUrl: string; // Target URL for the upload
+  method: string; // HTTP method
   onUpload?: (imageUrl: string) => void;
 }
 
@@ -11,8 +11,10 @@ export default function ImageUpload({
   method,
   onUpload,
 }: ImageUploadProps) {
+  // State for selected file
   const [file, setFile] = useState<File | null>(null);
 
+  // Handles image upload
   const handleUpload = async () => {
     if (!file) return;
     const formData = new FormData();
@@ -23,16 +25,19 @@ export default function ImageUpload({
       body: formData,
     });
     const data = await res.json();
+    // Calls callback with uploaded image URL
     if (onUpload) onUpload(data.url);
   };
 
   return (
     <div>
+      {/* File input */}
       <input
         type="file"
         accept="image/*"
         onChange={(e) => setFile(e.target.files?.[0] || null)}
       />
+      {/* Upload button */}
       <button
         type="button"
         onClick={handleUpload}

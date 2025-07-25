@@ -9,21 +9,26 @@ export default function ProjectsAdd({
 }: {
   onProjectAdded?: () => void;
 }) {
+  // State for project form fields
   const [form, setForm] = useState({
     title: "",
     category: "",
     image: "",
     description: "",
   });
+  // State for success message
   const [success, setSuccess] = useState(false);
+  // State for image upload modal
   const [showImageUpload, setShowImageUpload] = useState(false);
 
+  // Handles input changes for all fields
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
+  // Handles form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const res = await fetch(`${apiUrl}/projects`, {
@@ -39,6 +44,7 @@ export default function ProjectsAdd({
     }
   };
 
+  // Handles image upload and updates form state
   const handleImageUpload = (imageUrl: string) => {
     setForm({ ...form, image: imageUrl });
     setShowImageUpload(false);
@@ -52,6 +58,7 @@ export default function ProjectsAdd({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
     >
+      {/* Title input */}
       <input
         name="title"
         value={form.title}
@@ -59,6 +66,7 @@ export default function ProjectsAdd({
         placeholder="Title"
         className="p-2 bg-zinc-700 rounded w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"
       />
+      {/* Category input */}
       <input
         name="category"
         value={form.category}
@@ -66,6 +74,7 @@ export default function ProjectsAdd({
         placeholder="Category"
         className="p-2 bg-zinc-700 rounded w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"
       />
+      {/* Description input */}
       <input
         name="description"
         value={form.description}
@@ -73,6 +82,7 @@ export default function ProjectsAdd({
         placeholder="Description"
         className="p-2 bg-zinc-700 rounded w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"
       />
+      {/* Add image button */}
       <button
         type="button"
         onClick={() => setShowImageUpload(true)}
@@ -80,6 +90,7 @@ export default function ProjectsAdd({
       >
         Add Image
       </button>
+      {/* Image upload modal */}
       {showImageUpload && (
         <ImageUpload
           uploadUrl={`${process.env.NEXT_PUBLIC_API_URL}/uploads`}
@@ -87,12 +98,14 @@ export default function ProjectsAdd({
           onUpload={handleImageUpload}
         />
       )}
+      {/* Add project button */}
       <button
         type="submit"
         className="bg-cyan-500 px-4 hover:bg-cyan-600 py-2 rounded text-white"
       >
         Add Project
       </button>
+      {/* Success message */}
       {success && <div className="text-green-400 pt-2">Project added!</div>}
     </motion.form>
   );

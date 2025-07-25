@@ -22,11 +22,14 @@ interface About {
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function About() {
+  // State for loading status of skills and about data
   const [loadingSk, setLoadingSk] = useState(true);
   const [loadingAb, setLoadingAb] = useState(true);
+  // State for about and skills data
   const [about, setAbout] = useState<About[]>([]);
   const [skills, setSkills] = useState<Skills[]>([]);
 
+  // Fetch about data on mount
   useEffect(() => {
     fetch(`${apiUrl}/about`)
       .then((res) => res.json())
@@ -36,6 +39,7 @@ export default function About() {
       });
   }, []);
 
+  // Fetch skills data on mount
   useEffect(() => {
     fetch(`${apiUrl}/skills`)
       .then((res) => res.json())
@@ -45,6 +49,7 @@ export default function About() {
       });
   }, []);
 
+  // Show loading indicator while data is being fetched
   if (loadingAb) return <div className="text-center py-24">Loading…</div>;
   if (loadingSk) return <div className="text-center py-24">Loading…</div>;
 
@@ -54,7 +59,7 @@ export default function About() {
       className="py-24 bg-black/60 backdrop-blur-sm text-white px-6 md:px-20"
     >
       <div className="relative min-h-screen max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-        {/* Image */}
+        {/* Image and skills section */}
         <motion.div key="about-motion">
           <motion.div
             key="about-motion-image"
@@ -63,6 +68,7 @@ export default function About() {
             transition={{ duration: 0.6 }}
             className="relative"
           >
+            {/* Profile image */}
             <Image
               src={`${apiUrl}/uploads/${about[0].image}`}
               alt="Profil_Image"
@@ -72,7 +78,7 @@ export default function About() {
             />
             <div className="absolute inset-0 bg-primary/40 rounded-2xl pointer-events-none" />
           </motion.div>
-          {/* Skills */}
+          {/* Skills list */}
           <div className="mt-8 space-y-4">
             {skills.map((skill) => (
               <div key={skill.skill}>
@@ -94,7 +100,7 @@ export default function About() {
           </div>
         </motion.div>
 
-        {/* Text */}
+        {/* About text section */}
         <motion.div
           key="about-motion-text"
           initial={{ x: 50, opacity: 0 }}

@@ -23,21 +23,27 @@ interface About {
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function EditableAbout() {
+  // State for loading status of skills and about data
   const [loadingSk, setLoadingSk] = useState(true);
   const [loadingAb, setLoadingAb] = useState(true);
+  // State for about and skills data
   const [about, setAbout] = useState<About[]>([]);
   const [skills, setSkills] = useState<Skills[]>([]);
+  // State for success messages
   const [successAbUp, setSuccessAbUp] = useState(false);
   const [successSkAdd, setSuccessSkAdd] = useState(false);
   const [successSkUpId, setSuccessSkUp] = useState<number | null>(null);
   const [successSkDelId, setSuccessSkDel] = useState<number | null>(null);
+  // State for image upload modal
   const [showImageUpload, setShowImageUpload] = useState(false);
 
+  // State for skill form
   const [skillsForm, setSkillsForm] = useState({
     skill: "",
     level: 0,
   });
 
+  // Fetch about data on mount
   useEffect(() => {
     fetch(`${apiUrl}/about`)
       .then((res) => res.json())
@@ -47,6 +53,7 @@ export default function EditableAbout() {
       });
   }, []);
 
+  // Fetch skills data on mount
   useEffect(() => {
     fetch(`${apiUrl}/skills`)
       .then((res) => res.json())
@@ -56,11 +63,13 @@ export default function EditableAbout() {
       });
   }, []);
 
+  // Show loading indicator while data is being fetched
   if (loadingAb || !about) {
     return <div className="text-center py-24">Loading…</div>;
   }
   if (loadingSk) return <div className="text-center py-24">Loading…</div>;
 
+  // Updates about entry
   const updateAbout = async (id: number, about: About) => {
     await fetch(`${apiUrl}/about/${id}`, {
       method: "PUT",
@@ -74,14 +83,14 @@ export default function EditableAbout() {
     setAbout(data);
   };
 
-  // Handler für Skills
+  // Updates a skill entry
   const updateSkill = async (id: number, updatedSkill: Skills) => {
     await fetch(`${apiUrl}/skills/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedSkill),
     });
-    setSuccessSkUp(id)
+    setSuccessSkUp(id);
     const res = await fetch(`${apiUrl}/skills`);
     const data = await res.json();
     setSkills(data);
@@ -90,7 +99,7 @@ export default function EditableAbout() {
     }, 1000);
   };
 
-  // Skill hinzufügen
+  // Adds a new skill
   const addSkill = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -109,7 +118,7 @@ export default function EditableAbout() {
     setSkillsForm({ skill: "", level: 0 });
   };
 
-  // Skill löschen
+  // Deletes a skill by ID
   const removeSkill = async (id: number) => {
     await fetch(`${apiUrl}/skills/${id}`, {
       method: "DELETE",
@@ -123,7 +132,7 @@ export default function EditableAbout() {
     }, 1000);
   };
 
-  // Handler für einfache Felder
+  // Handles changes for about fields
   const handleChangeAbout = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     index: number
@@ -136,6 +145,7 @@ export default function EditableAbout() {
     setAbout(updatedAbout);
   };
 
+  // Handles changes for skill fields
   const handleChangeSkills = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
@@ -148,6 +158,7 @@ export default function EditableAbout() {
     setSkills(updatedSkills);
   };
 
+  // Handles changes for skill form
   const handleChangeSkillsForm = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setSkillsForm((prev) => ({
@@ -156,6 +167,7 @@ export default function EditableAbout() {
     }));
   };
 
+  // Handles image upload for about entry
   const handleImageUpload = (i: number, imageUrl: string) => {
     const updatedAbout = [...about];
     updatedAbout[i] = {
@@ -172,9 +184,11 @@ export default function EditableAbout() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
     >
+      {/* About section edit form */}
       {about.map((about, i) => (
         <div key={i} className="space-y-6">
           <div className="grid grid-cols-3 gap-4">
+            {/* Name input */}
             <input
               name="name"
               value={about.name}
@@ -182,6 +196,7 @@ export default function EditableAbout() {
               className="w-full p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
               placeholder="Name"
             />
+            {/* Phone input */}
             <input
               name="phone"
               value={about.phone}
@@ -189,6 +204,7 @@ export default function EditableAbout() {
               className="w-full p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
               placeholder="Phone"
             />
+            {/* Email input */}
             <input
               name="email"
               value={about.email}
@@ -197,6 +213,7 @@ export default function EditableAbout() {
               placeholder="Email"
             />
           </div>
+          {/* Description textarea */}
           <textarea
             name="description"
             value={about.description || ""}
@@ -205,6 +222,7 @@ export default function EditableAbout() {
             className="w-full p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none"
             placeholder="Description"
           />
+          {/* Change image button */}
           <button
             type="button"
             onClick={() => setShowImageUpload(true)}
@@ -212,6 +230,7 @@ export default function EditableAbout() {
           >
             Change Image
           </button>
+          {/* Image upload modal */}
           {showImageUpload && (
             <ImageUpload
               uploadUrl={`${process.env.NEXT_PUBLIC_API_URL}${about.image}`}
@@ -219,6 +238,7 @@ export default function EditableAbout() {
               onUpload={(imageUrl) => handleImageUpload(i, imageUrl)}
             />
           )}
+          {/* Update about button */}
           <button
             type="button"
             onClick={() => {
@@ -230,12 +250,15 @@ export default function EditableAbout() {
           </button>
         </div>
       ))}
+      {/* Success message for about update */}
       {successAbUp && <div className=" text-green-400 pt-2">Updated!</div>}
       <div>
         <h3 className="font-semibold text-cyan-500 mb-2">Skills</h3>
-        <div className="space-y-3  ">
+        <div className="space-y-3">
+          {/* Skills list */}
           {skills.map((skill, i) => (
-            <div key={i} className="  space-x-4">
+            <div key={i} className="space-x-4">
+              {/* Skill name input */}
               <input
                 name="skill"
                 value={skill.skill || ""}
@@ -243,6 +266,7 @@ export default function EditableAbout() {
                 className="p-2 rounded w-1/3 bg-zinc-700 text-white  focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 placeholder="Skill name"
               />
+              {/* Skill level input */}
               <input
                 name="level"
                 value={skill.level ?? 0}
@@ -252,7 +276,7 @@ export default function EditableAbout() {
                 className="p-2 rounded bg-zinc-700 text-white w-20 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 placeholder="%"
               />
-
+              {/* Edit skill button */}
               <button
                 type="button"
                 onClick={() => updateSkill(skill.id, skill)}
@@ -261,6 +285,7 @@ export default function EditableAbout() {
               >
                 <Pencil size={16} />
               </button>
+              {/* Remove skill button */}
               <button
                 type="button"
                 onClick={() => removeSkill(skill.id)}
@@ -269,19 +294,22 @@ export default function EditableAbout() {
               >
                 ×
               </button>
+              {/* Success message for skill update */}
               {successSkUpId === skill.id && (
                 <div className=" text-green-400 pt-2">Updated!</div>
               )}
-
-              {successSkDelId === skill.id &&  (
+              {/* Success message for skill removal */}
+              {successSkDelId === skill.id && (
                 <div className=" text-red-400 pt-2">Removed!</div>
               )}
             </div>
           ))}
         </div>
         <div className="mb-2">
+          {/* Add skill form */}
           <form className="" onSubmit={addSkill}>
-            <div className=" mt-18 space-x-4">
+            <div className="mt-18 space-x-4">
+              {/* Skill name input */}
               <input
                 name="skill"
                 value={skillsForm.skill}
@@ -289,6 +317,7 @@ export default function EditableAbout() {
                 placeholder="Skill"
                 className="w-1/3 p-2  bg-zinc-700 rounded  focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
+              {/* Skill level input */}
               <input
                 name="level"
                 type="number"
@@ -298,12 +327,14 @@ export default function EditableAbout() {
                 className="p-2 w-20 bg-zinc-700 rounded  focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
             </div>
+            {/* Add skill button */}
             <button
               type="submit"
               className="p-2 mt-4 w-30 bg-cyan-500 hover:bg-cyan-700 text-white text-lg rounded"
             >
               + Add Skill
             </button>
+            {/* Success message for skill addition */}
             {successSkAdd && (
               <div className=" text-green-400 pt-2">Skill added!</div>
             )}

@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
+// Metadata for SEO and social sharing
 export const metadata = {
   title: "My Portfolio",
   description: "Built with Next.js, Tailwind, TypeScript, shadcn/ui",
@@ -27,11 +28,15 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen flex flex-col bg-cover bg-center"
-        style={{ backgroundImage: "url('/hero-bg.jpg')" }}>
-
+      <body
+        className="min-h-screen flex flex-col bg-cover bg-center"
+        style={{ backgroundImage: "url('/hero-bg.jpg')" }}
+      >
+        {/* Site header */}
         <Header />
+        {/* Main content */}
         <main className="flex-grow">{children}</main>
+        {/* Site footer */}
         <Footer />
       </body>
     </html>
