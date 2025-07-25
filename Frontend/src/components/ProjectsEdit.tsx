@@ -130,6 +130,8 @@ export default function ProjectsEdit() {
               </button>
               {showImageUpload && (
                 <ImageUpload
+                  uploadUrl={`${process.env.NEXT_PUBLIC_API_URL}${project.image}`}
+                  method="PUT"
                   onUpload={(imageUrl) => handleImageUpload(index, imageUrl)}
                 />
               )}

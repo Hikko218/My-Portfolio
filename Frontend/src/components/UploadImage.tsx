@@ -1,11 +1,16 @@
 import { useState } from "react";
 
 interface ImageUploadProps {
-  projectId?: number; // Wenn gesetzt: PUT, sonst POST
+  uploadUrl: string; // Ziel-URL für den Upload
+  method: string; // HTTP-Methode, optional
   onUpload?: (imageUrl: string) => void;
 }
 
-export default function ImageUpload({ projectId, onUpload }: ImageUploadProps) {
+export default function ImageUpload({
+  uploadUrl,
+  method,
+  onUpload,
+}: ImageUploadProps) {
   const [file, setFile] = useState<File | null>(null);
 
   const handleUpload = async () => {
@@ -13,12 +18,7 @@ export default function ImageUpload({ projectId, onUpload }: ImageUploadProps) {
     const formData = new FormData();
     formData.append("file", file);
 
-    const method = projectId ? "PUT" : "POST";
-    const url = projectId
-      ? `${process.env.NEXT_PUBLIC_API_URL}/uploads/${projectId}`
-      : `${process.env.NEXT_PUBLIC_API_URL}/uploads`;
-
-    const res = await fetch(url, {
+    const res = await fetch(uploadUrl, {
       method,
       body: formData,
     });
@@ -31,7 +31,7 @@ export default function ImageUpload({ projectId, onUpload }: ImageUploadProps) {
       <input
         type="file"
         accept="image/*"
-        onChange={e => setFile(e.target.files?.[0] || null)}
+        onChange={(e) => setFile(e.target.files?.[0] || null)}
       />
       <button
         type="button"

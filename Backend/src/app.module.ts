@@ -8,8 +8,6 @@ import { AboutModule } from './about/about.module';
 import { SkillsModule } from './skills/skills.module';
 import * as path from 'path';
 import { ContactModule } from './contact/contact.module';
-import { BlogService } from './blog/blog.service';
-import { BlogController } from './blog/blog.controller';
 import { BlogModule } from './blog/blog.module';
 
 @Module({
@@ -45,7 +43,5 @@ import { BlogModule } from './blog/blog.module';
     ContactModule,
     BlogModule,
   ],
-  providers: [BlogService],
-  controllers: [BlogController],
 })
 export class AppModule {}

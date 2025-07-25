@@ -5,6 +5,7 @@ import {
   UseInterceptors,
   Delete,
   Param,
+  Put,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -33,6 +34,34 @@ export class UploadsController {
     }),
   )
   uploadFile(@UploadedFile() file: Express.Multer.File) {
+    return { url: `/uploads/${file.filename}` };
+  }
+
+  @Put(':filename')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: (_req, _file, cb) => {
+          fs.mkdirSync(uploadPath, { recursive: true });
+          cb(null, uploadPath);
+        },
+        filename: (_req, file, cb) => {
+          // Überschreibt die Datei mit dem Namen aus der URL
+          cb(null, file.originalname.replace(/\s/g, ''));
+        },
+      }),
+    }),
+  )
+  async updateFile(
+    @Param('filename') filename: string,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<{ url: string }> {
+    // Optional: Alte Datei löschen, falls vorhanden
+    const filePath = path.join(uploadPath, filename);
+    if (fs.existsSync(filePath)) {
+      await fs.promises.unlink(filePath);
+    }
+    // Die neue Datei wird gespeichert
     return { url: `/uploads/${file.filename}` };
   }
 

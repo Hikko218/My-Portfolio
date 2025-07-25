@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import ImageUpload  from "@/components/UploadImage";
+import ImageUpload from "@/components/UploadImage";
 
 export default function ProjectsAdd({
   onProjectAdded,
@@ -80,7 +80,13 @@ export default function ProjectsAdd({
       >
         Add Image
       </button>
-      {showImageUpload && <ImageUpload onUpload={handleImageUpload} />}
+      {showImageUpload && (
+        <ImageUpload
+          uploadUrl={`${process.env.NEXT_PUBLIC_API_URL}/uploads`}
+          method="POST"
+          onUpload={handleImageUpload}
+        />
+      )}
       <button
         type="submit"
         className="bg-cyan-500 px-4 hover:bg-cyan-600 py-2 rounded text-white"

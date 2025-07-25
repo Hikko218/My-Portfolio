@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Pencil } from "lucide-react";
+import ImageUpload from "@/components/UploadImage";
 
 interface Skills {
   id: number;
@@ -26,9 +27,11 @@ export default function EditableAbout() {
   const [loadingAb, setLoadingAb] = useState(true);
   const [about, setAbout] = useState<About[]>([]);
   const [skills, setSkills] = useState<Skills[]>([]);
-  const [successIdDel, setSuccessIdDel] = useState<number | null>(null);
-  const [successIdAdd, setSuccessIdAdd] = useState(false);
-  const [successIdUp, setSuccessIdUp] = useState(false);
+  const [successAbUp, setSuccessAbUp] = useState(false);
+  const [successSkAdd, setSuccessSkAdd] = useState(false);
+  const [successSkUpId, setSuccessSkUp] = useState<number | null>(null);
+  const [successSkDelId, setSuccessSkDel] = useState<number | null>(null);
+  const [showImageUpload, setShowImageUpload] = useState(false);
 
   const [skillsForm, setSkillsForm] = useState({
     skill: "",
@@ -64,8 +67,8 @@ export default function EditableAbout() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(about),
     });
-    setSuccessIdUp(true);
-    setTimeout(() => setSuccessIdUp(false), 2000);
+    setSuccessAbUp(true);
+    setTimeout(() => setSuccessAbUp(false), 2000);
     const res = await fetch(`${apiUrl}/about`);
     const data = await res.json();
     setAbout(data);
@@ -78,10 +81,13 @@ export default function EditableAbout() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedSkill),
     });
-
+    setSuccessSkUp(id)
     const res = await fetch(`${apiUrl}/skills`);
     const data = await res.json();
     setSkills(data);
+    setTimeout(() => {
+      setSuccessSkUp(null);
+    }, 1000);
   };
 
   // Skill hinzufügen
@@ -93,13 +99,13 @@ export default function EditableAbout() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(skillsForm),
     });
-    setSuccessIdAdd(true);
+    setSuccessSkAdd(true);
     setTimeout(async () => {
       const res = await fetch(`${apiUrl}/skills`);
       const data = await res.json();
       setSkills(data);
-      setSuccessIdAdd(false);
-    }, 2000);
+      setSuccessSkAdd(false);
+    }, 1000);
     setSkillsForm({ skill: "", level: 0 });
   };
 
@@ -108,13 +114,13 @@ export default function EditableAbout() {
     await fetch(`${apiUrl}/skills/${id}`, {
       method: "DELETE",
     });
-    setSuccessIdDel(id);
+    setSuccessSkDel(id);
     setTimeout(async () => {
       const res = await fetch(`${apiUrl}/skills`);
       const data = await res.json();
       setSkills(data);
-      setSuccessIdDel(null);
-    }, 2000);
+      setSuccessSkDel(null);
+    }, 1000);
   };
 
   // Handler für einfache Felder
@@ -150,6 +156,15 @@ export default function EditableAbout() {
     }));
   };
 
+  const handleImageUpload = (i: number, imageUrl: string) => {
+    const updatedAbout = [...about];
+    updatedAbout[i] = {
+      ...updatedAbout[i],
+      image: imageUrl,
+    };
+    setAbout(updatedAbout);
+  };
+
   return (
     <motion.div
       className="bg-zinc-900/70 p-6 rounded-lg space-y-6"
@@ -158,29 +173,30 @@ export default function EditableAbout() {
       transition={{ duration: 0.8 }}
     >
       {about.map((about, i) => (
-        <div key={i} className="grid md:grid-cols-2 gap-4">
-          <input
-            name="name"
-            value={about.name}
-            onChange={(e) => handleChangeAbout(e, i)}
-            className="p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            placeholder="Name"
-          />
-          <input
-            name="phone"
-            value={about.phone}
-            onChange={(e) => handleChangeAbout(e, i)}
-            className="p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            placeholder="Phone"
-          />
-          <input
-            name="email"
-            value={about.email}
-            onChange={(e) => handleChangeAbout(e, i)}
-            className="p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            placeholder="Email"
-          />
-
+        <div key={i} className="space-y-6">
+          <div className="grid grid-cols-3 gap-4">
+            <input
+              name="name"
+              value={about.name}
+              onChange={(e) => handleChangeAbout(e, i)}
+              className="w-full p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              placeholder="Name"
+            />
+            <input
+              name="phone"
+              value={about.phone}
+              onChange={(e) => handleChangeAbout(e, i)}
+              className="w-full p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              placeholder="Phone"
+            />
+            <input
+              name="email"
+              value={about.email}
+              onChange={(e) => handleChangeAbout(e, i)}
+              className="w-full p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              placeholder="Email"
+            />
+          </div>
           <textarea
             name="description"
             value={about.description || ""}
@@ -189,6 +205,20 @@ export default function EditableAbout() {
             className="w-full p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none"
             placeholder="Description"
           />
+          <button
+            type="button"
+            onClick={() => setShowImageUpload(true)}
+            className="w-full p-2 bg-cyan-500  hover:bg-cyan-600  rounded text-white text-lg"
+          >
+            Change Image
+          </button>
+          {showImageUpload && (
+            <ImageUpload
+              uploadUrl={`${process.env.NEXT_PUBLIC_API_URL}${about.image}`}
+              method="PUT"
+              onUpload={(imageUrl) => handleImageUpload(i, imageUrl)}
+            />
+          )}
           <button
             type="button"
             onClick={() => {
@@ -200,17 +230,17 @@ export default function EditableAbout() {
           </button>
         </div>
       ))}
-      {successIdUp && <div className=" text-green-400 pt-2">Updated!</div>}
+      {successAbUp && <div className=" text-green-400 pt-2">Updated!</div>}
       <div>
         <h3 className="font-semibold text-cyan-500 mb-2">Skills</h3>
-        <div className="space-y-3">
+        <div className="space-y-3  ">
           {skills.map((skill, i) => (
-            <div key={i} className="flex gap-3 items-center">
+            <div key={i} className="  space-x-4">
               <input
                 name="skill"
                 value={skill.skill || ""}
                 onChange={(e) => handleChangeSkills(e, i)}
-                className="p-2 rounded bg-zinc-700 text-white flex-1 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="p-2 rounded w-1/3 bg-zinc-700 text-white  focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 placeholder="Skill name"
               />
               <input
@@ -222,6 +252,7 @@ export default function EditableAbout() {
                 className="p-2 rounded bg-zinc-700 text-white w-20 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 placeholder="%"
               />
+
               <button
                 type="button"
                 onClick={() => updateSkill(skill.id, skill)}
@@ -238,21 +269,25 @@ export default function EditableAbout() {
               >
                 ×
               </button>
-              {successIdDel === skill.id && (
-                <div className=" text-red-400 pt-2">Skill removed!</div>
+              {successSkUpId === skill.id && (
+                <div className=" text-green-400 pt-2">Updated!</div>
+              )}
+
+              {successSkDelId === skill.id &&  (
+                <div className=" text-red-400 pt-2">Removed!</div>
               )}
             </div>
           ))}
         </div>
         <div className="mb-2">
-          <form className="flex flex-col" onSubmit={addSkill}>
-            <div className="flex  mt-6 gap-4">
+          <form className="" onSubmit={addSkill}>
+            <div className=" mt-18 space-x-4">
               <input
                 name="skill"
                 value={skillsForm.skill}
                 onChange={handleChangeSkillsForm}
                 placeholder="Skill"
-                className="p-2 flex-1 bg-zinc-700 rounded  focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="w-1/3 p-2  bg-zinc-700 rounded  focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
               <input
                 name="level"
@@ -269,7 +304,7 @@ export default function EditableAbout() {
             >
               + Add Skill
             </button>
-            {successIdAdd && (
+            {successSkAdd && (
               <div className=" text-green-400 pt-2">Skill added!</div>
             )}
           </form>
