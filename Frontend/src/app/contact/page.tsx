@@ -46,7 +46,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="min-h-screen py-24 px-6 md:px-20 bg-black/60 backdrop-blur-sm text-white"
+      className="min-h-screen py-24 px-6 md:px-20 bg-black/60 backdrop-blur-s text-white"
     >
       {/* Contact section title */}
       <motion.div
@@ -70,7 +70,7 @@ export default function Contact() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex flex-col md:flex-row gap-6 ">
           {/* Name input */}
           <input
             type="text"
@@ -78,7 +78,7 @@ export default function Contact() {
             placeholder="Your Name"
             value={form.name}
             onChange={handleChange}
-            className="flex-1 p-4 rounded-md bg-zinc-800/70 backdrop-blur-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            className="flex-1 p-4 rounded-md bg-zinc-800/30 backdrop-blur-s text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
             required
           />
           {/* Email input */}
@@ -88,7 +88,7 @@ export default function Contact() {
             placeholder="Your Email"
             value={form.email}
             onChange={handleChange}
-            className="flex-1 p-4 rounded-md  bg-zinc-800/70 backdrop-blur-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            className="flex-1 p-4 rounded-md  bg-zinc-800/30 backdrop-blur-s text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
             required
           />
         </div>
@@ -100,7 +100,7 @@ export default function Contact() {
           placeholder="Your Message"
           value={form.message}
           onChange={handleChange}
-          className="w-full p-4 rounded-md bg-zinc-800/70 backdrop-blur-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none"
+          className="w-full p-4 rounded-md bg-zinc-800/30 backdrop-blur-s text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none"
           required
         />
 

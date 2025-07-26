@@ -2,6 +2,7 @@ import "./globals.css";
 import { ReactNode } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import BackgroundWrapper from "@/components/BackgroundWrapper";
 
 // Metadata for SEO and social sharing
 export const metadata = {
@@ -14,7 +15,7 @@ export const metadata = {
     siteName: "Heiko Ries Portfolio",
     images: [
       {
-        url: "https://localhost:3001/Titel_Picture.JPG",
+        url: "https://localhost:3001/Titel_Picture.png",
         width: 1200,
         height: 630,
         alt: "Heiko Ries Portfolio Preview",
@@ -28,17 +29,14 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body
-        className="min-h-screen flex flex-col bg-cover bg-center"
-        style={{ backgroundImage: "url('/hero-bg.jpg')" }}
-      >
+      <BackgroundWrapper>
         {/* Site header */}
         <Header />
         {/* Main content */}
         <main className="flex-grow">{children}</main>
         {/* Site footer */}
         <Footer />
-      </body>
+      </BackgroundWrapper>
     </html>
   );
 }

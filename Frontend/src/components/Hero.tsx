@@ -13,7 +13,7 @@ export default function Hero() {
       className="relative min-h-screen flex items-center justify-center px-6 md:px-20 py-32 "
     >
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-0" />
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-s z-0" />
 
       {/* Content */}
       <motion.div
@@ -28,7 +28,7 @@ export default function Hero() {
             href="https://www.linkedin.com/in/heiko-ries-b35778374"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:bg-cyan-500"
+            className=" hover:bg-cyan-500 text-gray-300"
           >
             <ImLinkedin size={22} />
           </a>
@@ -36,7 +36,7 @@ export default function Hero() {
             href="https://github.com/Hikko218"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:bg-cyan-500 rounded-md"
+            className=" hover:bg-cyan-500 rounded-md text-gray-300"
           >
             <FaGithub size={22} />
           </a>

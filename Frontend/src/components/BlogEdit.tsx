@@ -4,85 +4,81 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import ImageUpload from "@/components/UploadImage";
 
-interface Project {
+interface Blog {
   id: number;
   title: string;
-  category: string;
   image: string;
   description: string;
 }
 
-interface ProjectsEditProps {
-  projects: Project[];
-  reloadProjects: () => Promise<void>;
+interface BlogEditProps {
+  blogs: Blog[];
+  reloadBlogs: () => Promise<void>;
 }
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export default function ProjectsEdit({
-  projects,
-  reloadProjects,
-}: ProjectsEditProps) {
+export default function BlogEdit({ blogs, reloadBlogs }: BlogEditProps) {
   // State for success messages
   const [successIdUp, setSuccessIdUp] = useState<number | null>(null);
   const [successIdDel, setSuccessIdDel] = useState<number | null>(null);
   // State for image upload modal
   const [imageUploadIndex, setImageUploadIndex] = useState<number | null>(null);
-  // State for Projects
-  const [editableProjects, setEditableProjects] = useState<Project[]>([]);
+  // State for Blogs
+  const [editableBlogs, setEditableBlogs] = useState<Blog[]>([]);
 
   useEffect(() => {
-    setEditableProjects(projects);
-  }, [projects]);
+    setEditableBlogs(blogs);
+  }, [blogs]);
 
-  // Handles changes for project fields
+  // Handles changes for blog fields
   const handleChange = (
     index: number,
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const updatedProjects = [...editableProjects];
-    updatedProjects[index] = {
-      ...updatedProjects[index],
+    const updatedBlogs = [...editableBlogs];
+    updatedBlogs[index] = {
+      ...updatedBlogs[index],
       [e.target.name]: e.target.value,
     };
-    setEditableProjects(updatedProjects);
+    setEditableBlogs(updatedBlogs);
   };
 
   // Updates a project entry
-  const updateProject = async (id: number, updatedProject: Project) => {
-    await fetch(`${apiUrl}/projects/${id}`, {
+  const updateBlog = async (id: number, updatedBlogs: Blog) => {
+    await fetch(`${apiUrl}/blog/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedProject),
+      body: JSON.stringify(updatedBlogs),
     });
-    reloadProjects();
+    reloadBlogs();
     setSuccessIdUp(id);
     setTimeout(() => setSuccessIdUp(null), 2000);
   };
 
   // Removes a project entry and its image
-  const removeProject = async (id: number, imageUrl?: string) => {
+  const removeBlog = async (id: number, imageUrl?: string) => {
     if (imageUrl) {
       const filename = imageUrl.split("/").pop();
       await fetch(`${apiUrl}/uploads/${filename}`, {
         method: "DELETE",
       });
     }
-    await fetch(`${apiUrl}/projects/${id}`, {
+    await fetch(`${apiUrl}/blog/${id}`, {
       method: "DELETE",
     });
     setSuccessIdDel(id);
     setTimeout(async () => {
-      reloadProjects();
+      reloadBlogs();
       setSuccessIdDel(null);
     }, 2000);
   };
 
   return (
     <div className=" space-y-6 bg-zinc-900/70 rounded-lg ">
-      {/* Edit Project form with callback to reload projects after editing */}
+      {/* Edit Blog form with callback to reload blogs after editing */}
       <AnimatePresence>
-        {editableProjects.map((project, index) => (
+        {editableBlogs.map((blog, index) => (
           <motion.div
             key={index}
             className="bg-zinc-900/70 rounded-lg"
@@ -92,24 +88,17 @@ export default function ProjectsEdit({
             transition={{ delay: index * 0.1 }}
           >
             <div className="p-6 flex flex-col gap-4">
-              {/* Project title input */}
+              {/* Blog title input */}
               <input
                 name="title"
-                value={project.title}
+                value={blog.title}
                 onChange={(e) => handleChange(index, e)}
                 className="w-full p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
-              {/* Project category input */}
-              <input
-                name="category"
-                value={project.category}
-                onChange={(e) => handleChange(index, e)}
-                className="w-full p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
-              />
-              {/* Project description input */}
+              {/* Blog description input */}
               <input
                 name="description"
-                value={project.description}
+                value={blog.description}
                 onChange={(e) => handleChange(index, e)}
                 className="p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
@@ -124,42 +113,40 @@ export default function ProjectsEdit({
               {/* Image upload modal */}
               {imageUploadIndex === index && (
                 <ImageUpload
-                  uploadUrl={`${process.env.NEXT_PUBLIC_API_URL}${project.image}`}
+                  uploadUrl={`${process.env.NEXT_PUBLIC_API_URL}${blog.image}`}
                   method="PUT"
                   onUpload={(imageUrl) => {
-                    const updatedProject = { ...project, image: imageUrl };
-                    updateProject(project.id, updatedProject);
+                    const updatedBlog = { ...blog, image: imageUrl };
+                    updateBlog(blog.id, updatedBlog);
                     setImageUploadIndex(null);
                   }}
                 />
               )}
               <div className=" grid-cols-2 space-x-4">
-                {/* Update project button */}
+                {/* Update blog button */}
                 <button
                   type="button"
-                  onClick={() =>
-                    updateProject(project.id, editableProjects[index])
-                  }
+                  onClick={() => updateBlog(blog.id, editableBlogs[index])}
                   className="p-2 rounded bg-cyan-500 text-white hover:bg-cyan-600  text-lg"
                   title="Update Project"
                 >
                   Update Project
                 </button>
-                {/* Remove project button */}
+                {/* Remove blog button */}
                 <button
                   type="button"
-                  onClick={() => removeProject(project.id, project.image)}
+                  onClick={() => removeBlog(blog.id, blog.image)}
                   className="p-2 rounded bg-red-500 text-white hover:bg-red-600  text-lg"
                   title="Remove Project"
                 >
                   Delete Project
                 </button>
                 {/* Success message for project update */}
-                {successIdUp === project.id && (
+                {successIdUp === blog.id && (
                   <div className=" text-green-400 pt-2">Project updated!</div>
                 )}
                 {/* Success message for project removal */}
-                {successIdDel === project.id && (
+                {successIdDel === blog.id && (
                   <div className=" text-red-400 pt-2">Project removed!</div>
                 )}
               </div>
