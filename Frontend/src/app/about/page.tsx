@@ -20,6 +20,7 @@ interface About {
 }
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const imageURL = process.env.NEXT_PUBLIC_IMAGE_URL;
 
 export default function About() {
   // State for loading status of skills and about data
@@ -71,7 +72,7 @@ export default function About() {
             >
               {/* Profile image */}
               <Image
-                src={`${apiUrl}/uploads/${about[0].image}`}
+                src={`${imageURL}/uploads/${about[0].image}`}
                 alt="Profil_Image"
                 width={500}
                 height={400}

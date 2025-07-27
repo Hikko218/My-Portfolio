@@ -14,6 +14,7 @@ interface Project {
 
 const categories = ["All", "Web", "App", "Design"];
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const imageURL = process.env.NEXT_PUBLIC_IMAGE_URL;
 
 export default function Projects() {
   // State for active category filter
@@ -94,7 +95,7 @@ export default function Projects() {
                 >
                   {/* Project image */}
                   <Image
-                    src={`${apiUrl}/uploads/${project.image}`}
+                    src={`${imageURL}/uploads${project.image}`}
                     alt={project.title}
                     width={600}
                     height={400}

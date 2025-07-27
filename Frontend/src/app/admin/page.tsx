@@ -4,6 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/ui/button";
 import { motion } from "framer-motion";
+import { useAuth } from "@/components/AuthContext";
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function AdminLogin() {
   const router = useRouter();
@@ -11,17 +14,24 @@ export default function AdminLogin() {
   const [form, setForm] = useState({ username: "", password: "" });
   // State for error message
   const [error, setError] = useState<string | null>(null);
+  // State for logged in
+  const { setIsLoggedIn } = useAuth();
 
   // Handles input changes for both fields
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
   // Handles form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Temporary login check (replace with JWT authentication later)
-    if (form.username === "admin" && form.password === "secret") {
+    const res = await fetch(`${apiUrl}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    });
+    if (res.ok) {
+      setIsLoggedIn(true)
       router.push("/admin/dashboard");
     } else {
       setError("Invalid credentials");
@@ -60,9 +70,7 @@ export default function AdminLogin() {
         />
 
         {/* Error message */}
-        {error && (
-          <div className="text-red-400 text-center">{error}</div>
-        )}
+        {error && <div className="text-red-400 text-center">{error}</div>}
 
         {/* Submit button */}
         <Button type="submit" className="w-full bg-cyan-500 hover:bg-cyan-700">

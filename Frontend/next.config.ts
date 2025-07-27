@@ -2,11 +2,20 @@ import {withSentryConfig} from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'http://localhost:3000/:path*', // Backend
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
         protocol: "http",
         hostname: "localhost",
+        port: "3000",
         pathname: "/uploads/**",
       },
     ],

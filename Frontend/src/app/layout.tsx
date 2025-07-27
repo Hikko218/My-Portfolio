@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import BackgroundWrapper from "@/components/BackgroundWrapper";
+import { AuthProvider } from "@/components/AuthContext";
 
 // Metadata for SEO and social sharing
 export const metadata = {
@@ -30,12 +31,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <BackgroundWrapper>
+        <AuthProvider>
         {/* Site header */}
         <Header />
         {/* Main content */}
         <main className="flex-grow">{children}</main>
         {/* Site footer */}
         <Footer />
+        </AuthProvider>
       </BackgroundWrapper>
     </html>
   );

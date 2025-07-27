@@ -13,6 +13,7 @@ interface Blog {
 }
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const imageURL = process.env.NEXT_PUBLIC_IMAGE_URL;
 
 export default function Blog() {
   // State for blog data
@@ -77,7 +78,7 @@ export default function Blog() {
               >
                 {/* Blog image */}
                 <Image
-                  src={`${apiUrl}/uploads/${blog.image}`}
+                  src={`${imageURL}/uploads/${encodeURIComponent(blog.image)}`}
                   alt={blog.title}
                   width={600}
                   height={400}

@@ -9,6 +9,8 @@ import { SkillsModule } from './skills/skills.module';
 import * as path from 'path';
 import { ContactModule } from './contact/contact.module';
 import { BlogModule } from './blog/blog.module';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -42,6 +44,8 @@ import { BlogModule } from './blog/blog.module';
     SkillsModule,
     ContactModule,
     BlogModule,
+    AuthModule,
+    UserModule,
   ],
 })
 export class AppModule {}

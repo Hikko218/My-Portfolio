@@ -2,10 +2,14 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { HiMenu } from "react-icons/hi";
 import { motion } from "framer-motion";
 import { ImLinkedin } from "react-icons/im";
 import { FaGithub } from "react-icons/fa";
+import { useAuth } from "@/components/AuthContext";
+import { useLogout } from "@/components/AuthLogout";
+import { useAuthCheck } from "@/components/AuthCookieCheck";
 
 // Navigation items for the header
 const navItems = [
@@ -18,43 +22,90 @@ const navItems = [
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { isLoggedIn } = useAuth();
+  const logout = useLogout();
+  const authCheck = useAuthCheck();
+  const router = useRouter();
+
+  const handleDashboardClick = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.preventDefault();
+    console.log("Dashboard Button clicked");
+    const success = await authCheck();
+    console.log("authCheck finished", success);
+    if (success) {
+      router.push("/admin/dashboard");
+    }
+  };
+
   return (
     <header className="fixed top-0 left-0 h-16 w-full z-50 bg-black/80 backdrop-blur-md border-b border-gray-800">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo Section */}
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-        >
-          <Link href="/admin" className="text-gray-300 hover:text-cyan-500 ">
-            Admin
-          </Link>
-        </motion.div>
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center">
+        {/* Left Section: Admin/Logout/LogIn/Dashboard */}
+        <div className="hidden md:flex gap-4 w-[150px] justify-start">
+          {isLoggedIn ? (
+            <>
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+              >
+                <Link
+                  href="#"
+                  onClick={logout}
+                  className="text-red-400 hover:text-red-500 "
+                >
+                  Logout
+                </Link>
+              </motion.div>
 
-        {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex space-x-8">
-          {navItems.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="text-gray-300 hover:text-cyan-500 transition-colors duration-300 cursor-default"
-            >
-              {item.name}
-            </Link>
-          ))}
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+              >
+                <button
+                  type="button"
+                  onClick={handleDashboardClick}
+                  className="text-yellow-400 hover:text-yellow-500 bg-transparent border-none cursor-pointer"
+                >
+                  Dashboard
+                </button>
+              </motion.div>
+            </>
+          ) : (
+            <>
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+              >
+                <Link
+                  href="/admin"
+                  className="text-green-400 hover:text-green-500 "
+                >
+                  LogIn
+                </Link>
+              </motion.div>
+            </>
+          )}
+        </div>
+
+        {/* Center Section: Desktop Navigation Links */}
+        <nav className="flex-1 flex justify-center">
+          <div className="hidden md:flex space-x-8">
+            {navItems.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className="text-gray-300 hover:text-cyan-500 transition-colors duration-300 cursor-default"
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
         </nav>
 
-        {/* Mobile Hamburger Icon */}
-        <button
-          className="md:hidden text-gray-300"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Open menu"
-        >
-          <HiMenu size={28} />
-        </button>
-
-        {/* Social Icons */}
-        <div className="hidden md:flex space-x-4 text-gray-300">
+        {/* Right Section: Social Icons */}
+        <div className="hidden md:flex space-x-4 text-gray-300 w-[150px] justify-end">
           <a
             href="https://www.linkedin.com/in/heiko-ries-b35778374"
             target="_blank"
@@ -72,6 +123,15 @@ export default function Header() {
             <FaGithub size={22} />
           </a>
         </div>
+
+        {/* Mobile Hamburger Icon */}
+        <button
+          className="md:hidden text-gray-300"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Open menu"
+        >
+          <HiMenu size={28} />
+        </button>
       </div>
 
       {/* Mobile Dropdown Menu */}

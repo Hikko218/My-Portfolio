@@ -1,4 +1,6 @@
 "use client";
+
+import React from "react";
 import { usePathname } from "next/navigation";
 
 const bgPositions: Record<string, string> = {
@@ -16,8 +18,11 @@ export default function BackgroundWrapper({
 }) {
   const pathname = usePathname();
 
-// Dynamically set backgroundSize for mobile
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
+  // Hydration-safe mobile detection
+  const [isMobile, setIsMobile] = React.useState(false);
+  React.useEffect(() => {
+    setIsMobile(window.innerWidth < 1024);
+  }, []);
   const backgroundSize = isMobile ? "cover" : "120% auto";
 
   return (
