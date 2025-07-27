@@ -8,7 +8,7 @@ import {
   Param,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
-import { Blog } from './blog.entity';
+import { BlogDto } from './dto/blog.dto';
 
 @Controller('blog')
 export class BlogController {
@@ -21,12 +21,12 @@ export class BlogController {
   }
 
   @Post()
-  create(@Body() data: Partial<Blog>) {
+  create(@Body() data: BlogDto) {
     return this.blogService.create(data);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() data: Partial<Blog>) {
+  update(@Param('id') id: string, @Body() data: Partial<BlogDto>) {
     return this.blogService.update(Number(id), data);
   }
 

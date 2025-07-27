@@ -17,7 +17,7 @@ export default function BlogAdd({ onBlogAdded }: { onBlogAdded?: () => void }) {
   const [showImageUpload, setShowImageUpload] = useState(false);
 
   // Handles input changes for all fields
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -54,7 +54,11 @@ export default function BlogAdd({ onBlogAdded }: { onBlogAdded?: () => void }) {
       transition={{ duration: 0.8 }}
     >
       {/* Title input */}
+      <label htmlFor="title" className="  text-cyan-500">
+        Title
+      </label>
       <input
+        id="title"
         name="title"
         value={form.title}
         onChange={handleChange}
@@ -62,10 +66,15 @@ export default function BlogAdd({ onBlogAdded }: { onBlogAdded?: () => void }) {
         className="p-2 bg-zinc-700 rounded w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"
       />
       {/* Description input */}
-      <input
+      <label htmlFor="description" className="  text-cyan-500">
+        Description
+      </label>
+      <textarea
+        id="description"
         name="description"
         value={form.description}
         onChange={handleChange}
+        rows={4}
         placeholder="Description"
         className="p-2 bg-zinc-700 rounded w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"
       />

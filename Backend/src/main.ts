@@ -5,7 +5,7 @@ import * as Sentry from '@sentry/node';
 import { SentryExceptionFilter } from './sentry-exception.filter';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
-import 'dotenv/config';
+import rateLimit from 'express-rate-limit';
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
@@ -27,6 +27,20 @@ async function bootstrap() {
     origin: 'http://localhost:3000',
     credentials: true,
   });
+  app.use(
+    '/contact',
+    rateLimit({
+      windowMs: 60 * 1000, // 1 Min
+      max: 5, // max. 5 Requests
+    }),
+  );
+  app.use(
+    '/auth',
+    rateLimit({
+      windowMs: 60 * 1000, //
+      max: 10,
+    }),
+  );
   await app.listen(process.env.PORT ?? 3000);
 }
 void bootstrap();

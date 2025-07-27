@@ -21,7 +21,7 @@ export default function Contact() {
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-  // Handles form submission
+  // Handles form mail contact
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);

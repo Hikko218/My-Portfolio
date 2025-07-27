@@ -32,12 +32,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <BackgroundWrapper>
         <AuthProvider>
-        {/* Site header */}
-        <Header />
-        {/* Main content */}
-        <main className="flex-grow">{children}</main>
-        {/* Site footer */}
-        <Footer />
+          {/* Site header */}
+          <Header />
+          {/* Main content */}
+          <main className="flex-grow">{children}</main>
+          {/* Site footer */}
+          <Footer />
         </AuthProvider>
       </BackgroundWrapper>
     </html>

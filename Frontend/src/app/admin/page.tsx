@@ -21,7 +21,7 @@ export default function AdminLogin() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  // Handles form submission
+  // Handles form for login
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -31,7 +31,7 @@ export default function AdminLogin() {
       body: JSON.stringify(form),
     });
     if (res.ok) {
-      setIsLoggedIn(true)
+      setIsLoggedIn(true);
       router.push("/admin/dashboard");
     } else {
       setError("Invalid credentials");

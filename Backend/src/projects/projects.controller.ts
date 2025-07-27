@@ -8,7 +8,7 @@ import {
   Param,
 } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
-import { Project } from './projects.entity';
+import { CreateProjectsDto } from './dto/create-projects.dto';
 
 @Controller('projects')
 export class ProjectsController {
@@ -21,12 +21,12 @@ export class ProjectsController {
   }
 
   @Post()
-  create(@Body() data: Partial<Project>) {
+  create(@Body() data: CreateProjectsDto) {
     return this.projectsService.create(data);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() data: Partial<Project>) {
+  update(@Param('id') id: string, @Body() data: Partial<CreateProjectsDto>) {
     return this.projectsService.update(Number(id), data);
   }
 

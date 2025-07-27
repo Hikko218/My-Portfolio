@@ -45,7 +45,7 @@ export default function BlogEdit({ blogs, reloadBlogs }: BlogEditProps) {
   };
 
   // Updates a project entry
-  const updateBlog = async (id: number, updatedBlogs: Blog) => {
+  const updateBlog = async (id: number, updatedBlogs: Partial<Blog>) => {
     await fetch(`${apiUrl}/blog/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -89,17 +89,26 @@ export default function BlogEdit({ blogs, reloadBlogs }: BlogEditProps) {
           >
             <div className="p-6 flex flex-col gap-4">
               {/* Blog title input */}
+              <label htmlFor="title" className="  text-cyan-500">
+                Title
+              </label>
               <input
+                id="title"
                 name="title"
                 value={blog.title}
                 onChange={(e) => handleChange(index, e)}
                 className="w-full p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
               {/* Blog description input */}
-              <input
+              <label htmlFor="description" className="  text-cyan-500">
+                Description
+              </label>
+              <textarea
+                id="description"
                 name="description"
                 value={blog.description}
                 onChange={(e) => handleChange(index, e)}
+                rows={4}
                 className="p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
               {/* Edit image button */}
@@ -113,7 +122,7 @@ export default function BlogEdit({ blogs, reloadBlogs }: BlogEditProps) {
               {/* Image upload modal */}
               {imageUploadIndex === index && (
                 <ImageUpload
-                  uploadUrl={`${process.env.NEXT_PUBLIC_API_URL}${blog.image}`}
+                  uploadUrl={`${apiUrl}${blog.image}`}
                   method="PUT"
                   onUpload={(imageUrl) => {
                     const updatedBlog = { ...blog, image: imageUrl };
@@ -130,7 +139,7 @@ export default function BlogEdit({ blogs, reloadBlogs }: BlogEditProps) {
                   className="p-2 rounded bg-cyan-500 text-white hover:bg-cyan-600  text-lg"
                   title="Update Project"
                 >
-                  Update Project
+                  Update Blog
                 </button>
                 {/* Remove blog button */}
                 <button
@@ -139,15 +148,15 @@ export default function BlogEdit({ blogs, reloadBlogs }: BlogEditProps) {
                   className="p-2 rounded bg-red-500 text-white hover:bg-red-600  text-lg"
                   title="Remove Project"
                 >
-                  Delete Project
+                  Delete Blog
                 </button>
                 {/* Success message for project update */}
                 {successIdUp === blog.id && (
-                  <div className=" text-green-400 pt-2">Project updated!</div>
+                  <div className=" text-green-400 pt-2">Blog updated!</div>
                 )}
                 {/* Success message for project removal */}
                 {successIdDel === blog.id && (
-                  <div className=" text-red-400 pt-2">Project removed!</div>
+                  <div className=" text-red-400 pt-2">Blog removed!</div>
                 )}
               </div>
             </div>

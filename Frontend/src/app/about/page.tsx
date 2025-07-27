@@ -62,7 +62,6 @@ export default function About() {
         ) : (
           <>
             {/* Image and skills section */}
-
             <motion.div
               key="about-motion-image"
               initial={{ x: -50, opacity: 0 }}
@@ -98,7 +97,14 @@ export default function About() {
                 About Me
               </h2>
               <p className="text-gray-300 leading-relaxed mb-6">
-                {about[0].description}
+                {about[0].description.split(",,").map((part, idx) => (
+                  <span key={idx}>
+                    {part}
+                    {idx < about[0].description.split(",,").length - 1 && (
+                      <br />
+                    )}
+                  </span>
+                ))}
               </p>
 
               <div className="space-y-1 text-sm text-gray-400">

@@ -1,5 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ContactService } from './contact.service';
+import { ContactDto } from './dto/contact.dto';
 
 @Controller('contact')
 export class ContactController {
@@ -7,9 +8,7 @@ export class ContactController {
   constructor(private readonly contactService: ContactService) {}
 
   @Post()
-  async sendMessage(
-    @Body() body: { name: string; email: string; message: string },
-  ) {
+  async sendMessage(@Body() body: ContactDto) {
     await this.contactService.sendMail(body.name, body.email, body.message);
     return { success: true };
   }

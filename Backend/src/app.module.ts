@@ -23,6 +23,7 @@ import { UserModule } from './user/user.module';
 
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
+
       useFactory: (config: ConfigService) => ({
         type: 'postgres',
         url: config.get('DATABASE_URL'),
@@ -33,7 +34,7 @@ import { UserModule } from './user/user.module';
           },
         },
         autoLoadEntities: true,
-        synchronize: true,
+        synchronize: false,
       }),
       inject: [ConfigService],
     }),

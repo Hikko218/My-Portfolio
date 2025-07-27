@@ -13,6 +13,7 @@ interface Project {
 }
 
 const categories = ["All", "Web", "App", "Design"];
+
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 const imageURL = process.env.NEXT_PUBLIC_IMAGE_URL;
 
@@ -108,7 +109,14 @@ export default function Projects() {
                     </h3>
                     <p className="text-sm text-gray-300">{project.category}</p>
                     <p className="text-sm text-gray-300">
-                      {project.description}
+                      {project.description.split(",,").map((part, idx) => (
+                        <span key={idx}>
+                          {part}
+                          {idx < project.description.split(",,").length - 1 && (
+                            <br />
+                          )}
+                        </span>
+                      ))}
                     </p>
                   </div>
                 </motion.div>

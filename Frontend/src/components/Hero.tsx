@@ -47,9 +47,9 @@ export default function Hero() {
         </h1>
         {/* Hero description */}
         <p className="text-lg text-gray-300 mb-8">
-          I’m on my way to becoming a Full-Stack Developer. My passion lies in
-          crafting elegant and efficient solutions that enhance user
-          experiences. I thrive on challenges and am always eager to learn new
+          I’m an aspiring Full-Stack Developer passionate about crafting
+          elegant, efficient solutions that enhance the user experience. I enjoy
+          taking on new challenges and am always eager to explore emerging
           technologies.
         </p>
 

@@ -1,6 +1,6 @@
 import { Controller, Get, Put, Body, Param } from '@nestjs/common';
 import { AboutService } from './about.service';
-import { About } from './about.entity';
+import { AboutDto } from './dto/about.dto';
 
 @Controller('about')
 export class AboutController {
@@ -12,7 +12,7 @@ export class AboutController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() data: Partial<About>) {
+  update(@Param('id') id: string, @Body() data: Partial<AboutDto>) {
     return this.aboutService.update(Number(id), data);
   }
 }

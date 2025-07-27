@@ -89,7 +89,16 @@ export default function Blog() {
                   <h3 className="text-xl text-cyan-500 font-semibold mb-1">
                     {blog.title}
                   </h3>
-                  <p className="text-lg text-gray-300">{blog.description}</p>
+                  <p className="text-sm text-gray-300">
+                    {blog.description.split(",,").map((part, idx) => (
+                      <span key={idx}>
+                        {part}
+                        {idx < blog.description.split(",,").length - 1 && (
+                          <br />
+                        )}
+                      </span>
+                    ))}
+                  </p>
                   <p className="text-sm mt-4 text-gray-300">
                     {new Date(blog.createdAt).toLocaleDateString()}
                   </p>

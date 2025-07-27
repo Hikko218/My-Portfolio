@@ -3,6 +3,7 @@
 import React from "react";
 import { usePathname } from "next/navigation";
 
+// Background positions for each route
 const bgPositions: Record<string, string> = {
   "/": "40% center",
   "/about": "55% center",
@@ -11,20 +12,19 @@ const bgPositions: Record<string, string> = {
   "/contact": "right center",
 };
 
+// Wrapper sets dynamic background image and position based on route
 export default function BackgroundWrapper({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-
-  // Hydration-safe mobile detection
+  // Detect mobile for background size
   const [isMobile, setIsMobile] = React.useState(false);
   React.useEffect(() => {
     setIsMobile(window.innerWidth < 1024);
   }, []);
   const backgroundSize = isMobile ? "cover" : "120% auto";
-
   return (
     <body
       className="min-h-screen flex flex-col bg-cover bg-center transition-all duration-700"

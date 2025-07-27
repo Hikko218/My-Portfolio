@@ -1,9 +1,10 @@
+// Service for handling contact form email sending
 import { Injectable, BadRequestException } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class ContactService {
-  // Sends an email using the provided contact information
+  // Send an email with contact form data
   async sendMail(name: string, email: string, message: string) {
     try {
       const transporter = nodemailer.createTransport({
@@ -25,7 +26,7 @@ export class ContactService {
                <p><strong>Message:</strong><br>${message}</p>`,
       });
     } catch {
-      // Throws if sending the email fails
+      // Throw error if email sending fails
       throw new BadRequestException('Failed to send contact email');
     }
   }

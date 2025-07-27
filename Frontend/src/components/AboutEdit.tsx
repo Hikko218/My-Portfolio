@@ -70,7 +70,7 @@ export default function EditableAbout() {
   if (loadingSk) return <div className="text-center py-24">Loading…</div>;
 
   // Updates about entry
-  const updateAbout = async (id: number, about: About) => {
+  const updateAbout = async (id: number, about: Partial<About>) => {
     await fetch(`${apiUrl}/about/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -189,29 +189,47 @@ export default function EditableAbout() {
         <div key={i} className="space-y-6">
           <div className="grid grid-cols-3 gap-4">
             {/* Name input */}
-            <input
-              name="name"
-              value={about.name}
-              onChange={(e) => handleChangeAbout(e, i)}
-              className="w-full p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
-              placeholder="Name"
-            />
+            <div>
+              <label htmlFor="name" className="  text-cyan-500">
+                Name
+              </label>
+              <input
+                id="name"
+                name="name"
+                value={about.name}
+                onChange={(e) => handleChangeAbout(e, i)}
+                className="w-full p-3 rounded  bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                placeholder="Name"
+              />
+            </div>
             {/* Phone input */}
-            <input
-              name="phone"
-              value={about.phone}
-              onChange={(e) => handleChangeAbout(e, i)}
-              className="w-full p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
-              placeholder="Phone"
-            />
+            <div>
+              <label htmlFor="phone" className="  text-cyan-500">
+                Phone
+              </label>
+              <input
+                id="phone"
+                name="phone"
+                value={about.phone}
+                onChange={(e) => handleChangeAbout(e, i)}
+                className="w-full p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                placeholder="Phone"
+              />
+            </div>
             {/* Email input */}
-            <input
-              name="email"
-              value={about.email}
-              onChange={(e) => handleChangeAbout(e, i)}
-              className="w-full p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
-              placeholder="Email"
-            />
+            <div>
+              <label htmlFor="email" className="  text-cyan-500">
+                Email
+              </label>
+              <input
+                id="email"
+                name="email"
+                value={about.email}
+                onChange={(e) => handleChangeAbout(e, i)}
+                className="w-full p-3 rounded  bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                placeholder="Email"
+              />
+            </div>
           </div>
           {/* Description textarea */}
           <textarea
@@ -233,7 +251,7 @@ export default function EditableAbout() {
           {/* Image upload modal */}
           {showImageUpload && (
             <ImageUpload
-              uploadUrl={`${process.env.NEXT_PUBLIC_API_URL}${about.image}`}
+              uploadUrl={`${apiUrl}${about.image}`}
               method="PUT"
               onUpload={(imageUrl) => handleImageUpload(i, imageUrl)}
             />

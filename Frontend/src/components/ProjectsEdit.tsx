@@ -93,24 +93,37 @@ export default function ProjectsEdit({
           >
             <div className="p-6 flex flex-col gap-4">
               {/* Project title input */}
+              <label htmlFor="title" className="  text-cyan-500">
+                Title
+              </label>
               <input
+                id="title"
                 name="title"
                 value={project.title}
                 onChange={(e) => handleChange(index, e)}
                 className="w-full p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
               {/* Project category input */}
+              <label htmlFor="category" className="  text-cyan-500">
+                Category
+              </label>
               <input
+                id="category"
                 name="category"
                 value={project.category}
                 onChange={(e) => handleChange(index, e)}
                 className="w-full p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
               {/* Project description input */}
-              <input
+              <label htmlFor="description" className="  text-cyan-500">
+                Description
+              </label>
+              <textarea
+                id="description"
                 name="description"
                 value={project.description}
                 onChange={(e) => handleChange(index, e)}
+                rows={4}
                 className="p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
               {/* Edit image button */}
@@ -124,7 +137,7 @@ export default function ProjectsEdit({
               {/* Image upload modal */}
               {imageUploadIndex === index && (
                 <ImageUpload
-                  uploadUrl={`${process.env.NEXT_PUBLIC_API_URL}${project.image}`}
+                  uploadUrl={`${apiUrl}${project.image}`}
                   method="PUT"
                   onUpload={(imageUrl) => {
                     const updatedProject = { ...project, image: imageUrl };
