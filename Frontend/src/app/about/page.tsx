@@ -71,7 +71,7 @@ export default function About() {
             >
               {/* Profile image */}
               <Image
-                src={`${imageURL}/uploads${about[0].image}`}
+                src={`${imageURL}/uploads/${about[0].image}`}
                 alt="Profil_Image"
                 width={500}
                 height={400}

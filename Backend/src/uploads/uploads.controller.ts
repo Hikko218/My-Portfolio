@@ -42,7 +42,7 @@ export class UploadsController {
   )
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     try {
-      return { url: `/uploads/${file.filename}` };
+      return { url: `${file.filename}` };
     } catch {
       // Throws if file upload fails
       throw new BadRequestException('File could not be uploaded');
@@ -80,7 +80,7 @@ export class UploadsController {
         await fs.promises.unlink(filePath);
       }
       // The new file is saved
-      return { url: `/uploads/${file.filename}` };
+      return { url: `${file.filename}` };
     } catch {
       // Throws if file update fails
       throw new BadRequestException('File could not be updated');

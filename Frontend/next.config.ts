@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "https://my-portfolio-6jwb.onrender.com",
+        hostname: "my-portfolio-6jwb.onrender.com",
         pathname: "/uploads/**",
       },
     ],

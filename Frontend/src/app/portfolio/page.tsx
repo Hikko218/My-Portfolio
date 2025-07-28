@@ -97,7 +97,7 @@ export default function Projects() {
                 >
                   {/* Project image */}
                   <Image
-                    src={`${imageURL}/uploads${project.image}`}
+                    src={`${imageURL}/uploads/${project.image}`}
                     alt={project.title}
                     width={600}
                     height={400}

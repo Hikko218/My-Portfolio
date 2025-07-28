@@ -79,7 +79,7 @@ export default function Blog() {
               >
                 {/* Blog image */}
                 <Image
-                  src={`${imageURL}/uploads${blog.image}`}
+                  src={`${imageURL}/uploads/${blog.image}`}
                   alt={blog.title}
                   width={600}
                   height={400}
