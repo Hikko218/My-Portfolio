@@ -16,4 +16,7 @@ export class Project {
 
   @Column()
   description: string;
+
+  @Column()
+  link: string;
 }

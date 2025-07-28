@@ -15,6 +15,7 @@ export default function ProjectsAdd({
     category: "",
     image: "",
     description: "",
+    link: "",
   });
   // State for success message
   const [success, setSuccess] = useState(false);
@@ -22,7 +23,9 @@ export default function ProjectsAdd({
   const [showImageUpload, setShowImageUpload] = useState(false);
 
   // Handles input changes for all fields
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -37,7 +40,13 @@ export default function ProjectsAdd({
       body: JSON.stringify(form),
     });
     if (res.ok) {
-      setForm({ title: "", category: "", image: "", description: "" });
+      setForm({
+        title: "",
+        category: "",
+        image: "",
+        description: "",
+        link: "",
+      });
       setSuccess(true);
       setTimeout(() => setSuccess(false), 2000);
       if (onProjectAdded) onProjectAdded();
@@ -93,6 +102,18 @@ export default function ProjectsAdd({
         onChange={handleChange}
         rows={4}
         placeholder="Description"
+        className="p-2 bg-zinc-700 rounded w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"
+      />
+      {/* Link input */}
+      <label htmlFor="link" className="  text-cyan-500">
+        Link
+      </label>
+      <input
+        id="link"
+        name="link"
+        value={form.link}
+        onChange={handleChange}
+        placeholder="link"
         className="p-2 bg-zinc-700 rounded w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"
       />
       {/* Add image button */}

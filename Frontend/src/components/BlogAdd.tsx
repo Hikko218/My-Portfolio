@@ -10,6 +10,7 @@ export default function BlogAdd({ onBlogAdded }: { onBlogAdded?: () => void }) {
     title: "",
     image: "",
     description: "",
+    link: "",
   });
   // State for success message
   const [success, setSuccess] = useState(false);
@@ -17,7 +18,9 @@ export default function BlogAdd({ onBlogAdded }: { onBlogAdded?: () => void }) {
   const [showImageUpload, setShowImageUpload] = useState(false);
 
   // Handles input changes for all fields
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -32,7 +35,7 @@ export default function BlogAdd({ onBlogAdded }: { onBlogAdded?: () => void }) {
       body: JSON.stringify(form),
     });
     if (res.ok) {
-      setForm({ title: "", image: "", description: "" });
+      setForm({ title: "", image: "", description: "", link: "" });
       setSuccess(true);
       setTimeout(() => setSuccess(false), 2000);
       if (onBlogAdded) onBlogAdded();
@@ -76,6 +79,18 @@ export default function BlogAdd({ onBlogAdded }: { onBlogAdded?: () => void }) {
         onChange={handleChange}
         rows={4}
         placeholder="Description"
+        className="p-2 bg-zinc-700 rounded w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"
+      />
+      {/* Link input */}
+      <label htmlFor="link" className="  text-cyan-500">
+        Link
+      </label>
+      <input
+        id="link"
+        name="link"
+        value={form.link}
+        onChange={handleChange}
+        placeholder="Link"
         className="p-2 bg-zinc-700 rounded w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"
       />
       {/* Add image button */}

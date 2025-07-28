@@ -6,6 +6,7 @@ import {
   Res,
   UseGuards,
   Body,
+  HttpCode,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
@@ -28,6 +29,7 @@ export class AuthController {
 
   // Login route: expects username and password in body
   @Post('login')
+  @HttpCode(200)
   async login(@Body() body: LoginBody, @Res() res: Response) {
     const user = await this.authService.validateUser(
       body.username,
@@ -48,6 +50,7 @@ export class AuthController {
 
   // Logout route
   @Post('logout')
+  @HttpCode(200)
   logout(@Res() res: Response) {
     res.clearCookie('token', { path: '/' });
     return res.send({ message: 'Logged out' });

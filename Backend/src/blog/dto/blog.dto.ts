@@ -9,4 +9,7 @@ export class BlogDto {
 
   @IsString()
   image: string;
+
+  @IsString()
+  link: string;
 }

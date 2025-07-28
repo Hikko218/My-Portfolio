@@ -25,4 +25,7 @@ export class Blog {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column()
+  link: string;
 }

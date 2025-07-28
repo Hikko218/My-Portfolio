@@ -9,6 +9,7 @@ interface Blog {
   title: string;
   image: string;
   description: string;
+  link: string
 }
 
 interface BlogEditProps {
@@ -111,6 +112,17 @@ export default function BlogEdit({ blogs, reloadBlogs }: BlogEditProps) {
                 rows={4}
                 className="p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
+              {/* Blog link input */}
+              <label htmlFor="link" className="  text-cyan-500">
+                Link
+              </label>
+              <input
+                id="link"
+                name="link"
+                value={blog.link}
+                onChange={(e) => handleChange(index, e)}
+                className="w-full p-3 rounded bg-zinc-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              />
               {/* Edit image button */}
               <button
                 type="button"
@@ -122,7 +134,7 @@ export default function BlogEdit({ blogs, reloadBlogs }: BlogEditProps) {
               {/* Image upload modal */}
               {imageUploadIndex === index && (
                 <ImageUpload
-                  uploadUrl={`${apiUrl}${blog.image}`}
+                  uploadUrl={`${process.env.NEXT_PUBLIC_API_URL}${blog.image}`}
                   method="PUT"
                   onUpload={(imageUrl) => {
                     const updatedBlog = { ...blog, image: imageUrl };

@@ -10,6 +10,7 @@ interface Project {
   category: string;
   image: string;
   description: string;
+  link: string;
 }
 
 const categories = ["All", "Web", "App", "Design"];
@@ -118,6 +119,14 @@ export default function Projects() {
                         </span>
                       ))}
                     </p>
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-cyan-500 hover:text-cyan-600 "
+                    >
+                      {project.link}
+                    </a>
                   </div>
                 </motion.div>
               ))}

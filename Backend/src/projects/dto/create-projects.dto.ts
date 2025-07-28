@@ -12,4 +12,7 @@ export class CreateProjectsDto {
 
   @IsString()
   description: string;
+
+  @IsString()
+  link: string;
 }

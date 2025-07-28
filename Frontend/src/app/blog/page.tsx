@@ -10,6 +10,7 @@ interface Blog {
   image: string;
   updatedAt: string;
   createdAt: string;
+  link: string
 }
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -99,6 +100,14 @@ export default function Blog() {
                       </span>
                     ))}
                   </p>
+                  <a
+                      href={blog.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-cyan-500 hover:text-cyan-600 "
+                    >
+                      {blog.link}
+                    </a>
                   <p className="text-sm mt-4 text-gray-300">
                     {new Date(blog.createdAt).toLocaleDateString()}
                   </p>
