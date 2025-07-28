@@ -251,8 +251,8 @@ export default function EditableAbout() {
           {/* Image upload modal */}
           {showImageUpload && (
             <ImageUpload
-              uploadUrl={`${apiUrl}${about.image}`}
-              method="PUT"
+              uploadUrl={`${apiUrl}/uploads`}
+              method="POST"
               onUpload={(imageUrl) => handleImageUpload(i, imageUrl)}
             />
           )}

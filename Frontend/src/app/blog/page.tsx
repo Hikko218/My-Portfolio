@@ -10,7 +10,7 @@ interface Blog {
   image: string;
   updatedAt: string;
   createdAt: string;
-  link: string
+  link: string;
 }
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -79,7 +79,7 @@ export default function Blog() {
               >
                 {/* Blog image */}
                 <Image
-                  src={`${imageURL}/uploads/${encodeURIComponent(blog.image)}`}
+                  src={`${imageURL}/uploads${blog.image}`}
                   alt={blog.title}
                   width={600}
                   height={400}
@@ -101,13 +101,13 @@ export default function Blog() {
                     ))}
                   </p>
                   <a
-                      href={blog.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-cyan-500 hover:text-cyan-600 "
-                    >
-                      {blog.link}
-                    </a>
+                    href={blog.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-cyan-500 hover:text-cyan-600 "
+                  >
+                    {blog.link}
+                  </a>
                   <p className="text-sm mt-4 text-gray-300">
                     {new Date(blog.createdAt).toLocaleDateString()}
                   </p>
