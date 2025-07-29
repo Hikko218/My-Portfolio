@@ -86,14 +86,15 @@ export default function Projects() {
           {/* Projects grid */}
           <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
             <AnimatePresence>
-              {filteredProjects.map((project, index) => (
+              {filteredProjects.map((project) => (
                 <motion.div
-                  key={index}
+                  key={project.id}
                   className="bg-zinc-800/30 backdrop-blur-s rounded-lg overflow-hidden shadow hover:shadow-xl transition duration-300"
                   initial={{ opacity: 0, y: 40 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  transition={{ delay: index * 0.5 }}
+                  transition={{ duration: 0.3 }}
+                  style={{ willChange: 'opacity, transform', position: 'relative' }}
                 >
                   {/* Project image */}
                   <Image
@@ -102,6 +103,7 @@ export default function Projects() {
                     width={600}
                     height={400}
                     className="w-full h-56 object-cover"
+                    priority
                   />
                   {/* Project details */}
                   <div className="p-5">
