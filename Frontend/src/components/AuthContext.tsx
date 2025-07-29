@@ -5,43 +5,57 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useCallback } from "react";
 import { useEffect } from "react";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-const AuthContext = createContext({
-  isLoggedIn: false, // Indicates if the user is logged in
-  setIsLoggedIn: (status: boolean) => {}, // Function to update login state
+interface AuthContextType {
+  isLoggedIn: boolean;
+  setIsLoggedIn: (status: boolean) => void;
+  checkAuth: () => Promise<boolean>;
+  refreshAuth: () => Promise<void>;
+}
+
+const AuthContext = createContext<AuthContextType>({
+  isLoggedIn: false,
+  setIsLoggedIn: () => {},
+  checkAuth: async () => false,
+  refreshAuth: async () => {},
 });
 
 // Create a context for authentication state
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Checks on load if a valid token exists (validated by backend)
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        // Adjust the URL to match your backend endpoint if needed
-        const res = await fetch(`${apiUrl}/auth/admin`, {
-          method: "GET",
-          credentials: "include", // sends cookies with the request
-        });
-        if (res.ok) {
-          setIsLoggedIn(true);
-        } else {
-          setIsLoggedIn(false);
-        }
-      } catch (err) {
-        setIsLoggedIn(false);
-      }
-    };
-    checkAuth();
+  // Auth-Check Funktion, gibt nur true/false zurück, stabil via useCallback
+  const checkAuth = useCallback(async () => {
+    try {
+      const res = await fetch(`${apiUrl}/auth/admin`, {
+        method: "GET",
+        credentials: "include",
+      });
+      return res.ok;
+    } catch (err) {
+      return false;
+    }
   }, []);
 
+  // Setzt den State nach aktuellem Auth-Status, stabil via useCallback
+  const refreshAuth = useCallback(async () => {
+    const ok = await checkAuth();
+    setIsLoggedIn(ok);
+  }, [checkAuth]);
+
+  // Nur einmal beim Laden prüfen
+  useEffect(() => {
+    refreshAuth();
+  }, [refreshAuth]);
+
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn, setIsLoggedIn, checkAuth, refreshAuth }}
+    >
       {children}
     </AuthContext.Provider>
   );

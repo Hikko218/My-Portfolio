@@ -9,7 +9,6 @@ import { ImLinkedin } from "react-icons/im";
 import { FaGithub } from "react-icons/fa";
 import { useAuth } from "@/components/AuthContext";
 import { useLogout } from "@/components/AuthLogout";
-import { useAuthCheck } from "@/components/AuthCookieCheck";
 
 // Navigation items for the header
 const navItems = [
@@ -22,16 +21,15 @@ const navItems = [
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, checkAuth } = useAuth();
   const logout = useLogout();
-  const authCheck = useAuthCheck();
   const router = useRouter();
 
   const handleDashboardClick = async (
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
-    const success = await authCheck();
+    const success = await checkAuth();
     if (success) {
       router.push("/admin/dashboard");
     }

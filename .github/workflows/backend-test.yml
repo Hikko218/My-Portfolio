@@ -50,7 +50,12 @@ jobs:
       - name: Build backend
         run: npm run build
 
-      - name: Upload Sentry sourcemaps
+      - name: Mask Sentry Auth Token
+        run: echo "::add-mask::${SENTRY_AUTH_TOKEN}"
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
+      - name: Upload Sentry sourcemaps
         run: npm run sentry:sourcemaps
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}

@@ -2,7 +2,6 @@ import {
   Controller,
   Post,
   Get,
-  Req,
   Res,
   UseGuards,
   Body,
@@ -10,12 +9,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
-import { Response, Request } from 'express';
-
-interface RequestWithCookies extends Request {
-  cookies: { [key: string]: string };
-  user: { userId: number; username: string };
-}
+import { Response } from 'express';
 
 interface LoginBody {
   username: string;
@@ -44,8 +38,8 @@ export class AuthController {
   // Protected admin route
   @UseGuards(AuthGuard('jwt'))
   @Get('admin')
-  getAdminData(@Req() req: RequestWithCookies) {
-    return { message: 'Protected admin data', user: req.user };
+  getAdminData() {
+    return { message: 'Admin confirmed' };
   }
 
   // Logout route
