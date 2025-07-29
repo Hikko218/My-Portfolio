@@ -149,7 +149,7 @@ export default function ProjectsEdit({
               {/* Image upload modal */}
               {imageUploadIndex === index && (
                 <ImageUpload
-                  uploadUrl={`${process.env.NEXT_PUBLIC_API_URL}${project.image}`}
+                  uploadUrl={`${process.env.NEXT_PUBLIC_API_URL}//${project.image}`}
                   method="PUT"
                   onUpload={(imageUrl) => {
                     const updatedProject = { ...project, image: imageUrl };

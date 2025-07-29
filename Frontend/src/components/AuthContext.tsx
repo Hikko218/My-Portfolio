@@ -8,6 +8,8 @@
 import { createContext, useContext, useState } from "react";
 import { useEffect } from "react";
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 const AuthContext = createContext({
   isLoggedIn: false, // Indicates if the user is logged in
   setIsLoggedIn: (status: boolean) => {}, // Function to update login state
@@ -22,7 +24,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const checkAuth = async () => {
       try {
         // Adjust the URL to match your backend endpoint if needed
-        const res = await fetch("/api/auth/admin", {
+        const res = await fetch(`${apiUrl}/auth/admin`, {
           method: "GET",
           credentials: "include", // sends cookies with the request
         });

@@ -1,11 +1,9 @@
-
+"use client";
 // Import authentication context hook
 import { useAuth } from "./AuthContext";
 
-
 // API base URL from environment
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
 
 /**
  * useAuthCheck
@@ -28,7 +26,7 @@ export function useAuthCheck() {
         setIsLoggedIn(false); // User is not authenticated
         return false;
       }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       setIsLoggedIn(false); // Error, treat as not authenticated
       return false;

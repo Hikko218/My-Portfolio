@@ -175,6 +175,7 @@ export default function EditableAbout() {
       image: imageUrl,
     };
     setAbout(updatedAbout);
+    setShowImageUpload(false);
   };
 
   return (

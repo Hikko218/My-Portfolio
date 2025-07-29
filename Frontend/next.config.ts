@@ -2,6 +2,14 @@ import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "https://my-portfolio-6jwb.onrender.com/:path*",
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

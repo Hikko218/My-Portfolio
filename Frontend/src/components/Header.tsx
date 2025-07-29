@@ -31,9 +31,7 @@ export default function Header() {
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
-    console.log("Dashboard Button clicked");
     const success = await authCheck();
-    console.log("authCheck finished", success);
     if (success) {
       router.push("/admin/dashboard");
     }

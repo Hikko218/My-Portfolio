@@ -16,6 +16,8 @@ export default function AdminLogin() {
   const [error, setError] = useState<string | null>(null);
   // State for logged in
   const { setIsLoggedIn } = useAuth();
+  // State for success message
+  const [success, setSuccess] = useState(false);
 
   // Handles input changes for both fields
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -32,9 +34,12 @@ export default function AdminLogin() {
     });
     if (res.ok) {
       setIsLoggedIn(true);
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 2000);
       router.push("/admin/dashboard");
     } else {
       setError("Invalid credentials");
+      setTimeout(() => setError(null), 2000);
     }
   };
 
@@ -68,6 +73,8 @@ export default function AdminLogin() {
           onChange={handleChange}
           className="w-full p-3 rounded bg-zinc-800 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
         />
+        {/* Success message */}
+        {success && <div className="text-green-400 pt-2">Login successful!</div>}
 
         {/* Error message */}
         {error && <div className="text-red-400 text-center">{error}</div>}

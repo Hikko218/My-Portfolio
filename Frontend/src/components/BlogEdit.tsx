@@ -134,7 +134,7 @@ export default function BlogEdit({ blogs, reloadBlogs }: BlogEditProps) {
               {/* Image upload modal */}
               {imageUploadIndex === index && (
                 <ImageUpload
-                  uploadUrl={`${apiUrl}/uploads/${blog.image}`}
+                  uploadUrl={`${apiUrl}//${blog.image}`}
                   method="PUT"
                   onUpload={(imageUrl) => {
                     const updatedBlog = { ...blog, image: imageUrl };

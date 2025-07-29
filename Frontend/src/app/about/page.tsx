@@ -76,6 +76,7 @@ export default function About() {
                 width={500}
                 height={400}
                 className="rounded-2xl shadow-md  object-cover w-full h-auto  aspect-[5/4]"
+                priority
                 style={{
                   maskImage:
                     "linear-gradient(to bottom, black 50%, transparent 100%)",
