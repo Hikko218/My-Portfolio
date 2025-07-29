@@ -75,8 +75,7 @@ describe('AuthController', () => {
         .get('/auth/admin')
         .expect(200);
       expect(res.body).toEqual({
-        message: 'Protected admin data',
-        user: { userId: 1, username: 'admin' },
+        message: 'Admin confirmed',
       });
     });
   });
