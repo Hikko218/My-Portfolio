@@ -11,6 +11,9 @@ RUN npm ci
 # Copy source files
 COPY . .
 
+ARG SENTRY_AUTH_TOKEN
+ENV SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
+
 # Build the NestJS app
 RUN npm run build
 
