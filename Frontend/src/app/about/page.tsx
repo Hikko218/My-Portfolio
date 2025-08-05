@@ -97,15 +97,8 @@ export default function About() {
               <h2 className="text-3xl font-bold mb-6 text-cyan-500">
                 About Me
               </h2>
-              <p className="text-gray-300 leading-relaxed mb-6">
-                {about[0].description.split(",,").map((part, idx) => (
-                  <span key={idx}>
-                    {part}
-                    {idx < about[0].description.split(",,").length - 1 && (
-                      <br />
-                    )}
-                  </span>
-                ))}
+              <p className="text-gray-300 leading-relaxed mb-6 whitespace-pre-line">
+                {about[0].description}
               </p>
 
               <div className="space-y-1 text-sm text-gray-400">

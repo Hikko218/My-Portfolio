@@ -12,11 +12,11 @@ export const metadata = {
   openGraph: {
     title: "My Portfolio",
     description: "Built with Next.js, Tailwind, TypeScript, shadcn/ui",
-    url: "https://my-portfolio.de",
+    url: "https://my-portfolio-henna-one-36.vercel.app",
     siteName: "Heiko Ries Portfolio",
     images: [
       {
-        url: "https://localhost:3001/Titel_Picture.png",
+        url: "https://my-portfolio-henna-one-36.vercel.app/Titel_Picture_1.png",
         width: 1200,
         height: 630,
         alt: "Heiko Ries Portfolio Preview",

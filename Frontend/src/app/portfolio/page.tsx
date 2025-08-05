@@ -94,7 +94,10 @@ export default function Projects() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.3 }}
-                  style={{ willChange: 'opacity, transform', position: 'relative' }}
+                  style={{
+                    willChange: "opacity, transform",
+                    position: "relative",
+                  }}
                 >
                   {/* Project image */}
                   <Image
@@ -111,15 +114,8 @@ export default function Projects() {
                       {project.title}
                     </h3>
                     <p className="text-sm text-gray-300">{project.category}</p>
-                    <p className="text-sm text-gray-300">
-                      {project.description.split(",,").map((part, idx) => (
-                        <span key={idx}>
-                          {part}
-                          {idx < project.description.split(",,").length - 1 && (
-                            <br />
-                          )}
-                        </span>
-                      ))}
+                    <p className="text-sm text-gray-300 whitespace-pre-line">
+                      {project.description}
                     </p>
                     <a
                       href={project.link}

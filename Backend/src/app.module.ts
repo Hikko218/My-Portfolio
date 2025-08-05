@@ -11,6 +11,8 @@ import { ContactModule } from './contact/contact.module';
 import { BlogModule } from './blog/blog.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -48,5 +50,7 @@ import { UserModule } from './user/user.module';
     AuthModule,
     UserModule,
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

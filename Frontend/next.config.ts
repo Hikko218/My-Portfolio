@@ -6,7 +6,10 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://my-portfolio-6jwb.onrender.com/:path*",
+        destination:
+          process.env.NODE_ENV === "development"
+            ? "http://localhost:3000/:path*"
+            : "https://my-portfolio-6jwb.onrender.com/:path*",
       },
     ];
   },

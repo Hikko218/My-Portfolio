@@ -90,15 +90,8 @@ export default function Blog() {
                   <h3 className="text-xl text-cyan-500 font-semibold mb-1">
                     {blog.title}
                   </h3>
-                  <p className="text-sm text-gray-300">
-                    {blog.description.split(",,").map((part, idx) => (
-                      <span key={idx}>
-                        {part}
-                        {idx < blog.description.split(",,").length - 1 && (
-                          <br />
-                        )}
-                      </span>
-                    ))}
+                  <p className="text-sm text-gray-300 whitespace-pre-line">
+                    {blog.description}
                   </p>
                   <a
                     href={blog.link}

@@ -15,4 +15,9 @@ export class AppController {
   getError() {
     throw new Error('My first Sentry error!');
   }
+
+  @Get('/healthz')
+  healthCheck() {
+    return { status: 'ok' };
+  }
 }
