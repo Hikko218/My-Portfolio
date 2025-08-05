@@ -18,7 +18,7 @@ export class BlogService {
   // Returns all blog posts ordered by ID
   async findAll() {
     try {
-      return await this.blogRepo.find({ order: { id: 'ASC' } });
+      return await this.blogRepo.find({ order: { createdAt: 'DESC' } });
     } catch {
       // Throws if there is a problem loading blog posts
       throw new BadRequestException('Error loading blog posts');
