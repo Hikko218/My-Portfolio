@@ -13,6 +13,11 @@ Includes a **contact form with email-sending**, **admin Dashboard**, **SEO optim
 
 ![Screenshot](./Backend/public/uploads/Titel_Picture.png)
 
+**Gallery:**
+| About| Portfolio | Blog | Admin Dashboard |
+|------|-----------|------|-----------------|
+| ![About](./Frontend/public/My_Portfolio_About.png) | ![Portfolio](./Frontend/public/My_Portfolio_Projects.png) | ![Blog](./Frontend/public/My_Portfolio_Blog.png) | ![Admin](./Frontend/public/My_Portfolio_Admin.png) |
+
 ---
 
 ## 🛠️ Tech Stack & Tools
