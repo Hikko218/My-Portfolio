@@ -1,5 +1,7 @@
 # 🌐 My Portfolio
 
+⚠️ **Note:** Backend & database are deactivated – only the static frontend demo is live. 🌐
+
 [![Live on Vercel](https://img.shields.io/badge/Live-Vercel-000?logo=vercel)](https://my-portfolio-henna-one-36.vercel.app/)
 [![CI](https://img.shields.io/github/actions/workflow/status/Hikko218/My-Portfolio/backend-test.yml?label=Build&logo=githubactions)](https://github.com/Hikko218/My-Portfolio/actions)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?logo=linkedin)](https://www.linkedin.com/in/heiko-ries-b35778374)
